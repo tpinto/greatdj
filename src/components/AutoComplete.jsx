@@ -7,7 +7,7 @@ var React = require('react');
 var AutoComplete = React.createClass({
 
   componentDidUpdate: function(){
-    this.refs.theDiv.getDOMNode().style.left = document.querySelector('input.q').offsetLeft;
+    this.refs.theDiv.getDOMNode().style.left = document.querySelector('input.q').offsetLeft + "px";
   },
 
   handleItemClick: function(e){

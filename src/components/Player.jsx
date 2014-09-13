@@ -48,9 +48,10 @@ var Player = React.createClass({
 
   _loadNewUrl: function(videoId) {
     this.props.autoplay
-      ? this.state.player.loadVideoById(videoId, 0)
+      ? this.state.player.loadVideoById(videoId, 0, "hd720")
       : this.state.player.cueVideoById(videoId);
 
+    this.state.player.setPlaybackQuality("hd720");
     this.refs.curtain.getDOMNode().style.display = 'none';
   },
 

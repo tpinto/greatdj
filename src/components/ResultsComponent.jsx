@@ -10,7 +10,7 @@ var ResultsComponent = React.createClass({
   getInitialState: function() {
     return {
       playing: false,
-      playlistToggled: false
+      playlistToggled: true
     };
   },
 

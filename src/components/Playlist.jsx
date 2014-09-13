@@ -25,7 +25,7 @@ var Playlist = React.createClass({
     // the element disappear straights away and the playlist shows one more top item (before the scroll/height animation kicks in)
     if(this.playlistCount > this.props.playlist.length && !this.props.playlistToggled && this.props.position){
       this.refs.playlist.getDOMNode().style.transition = "none";
-      this.refs.playlist.getDOMNode().style.height = liHeight * (this.props.playlist.length - this.props.position) + 6;
+      this.refs.playlist.getDOMNode().style.height = (liHeight * (this.props.playlist.length - this.props.position) + 6) + "px";
     } else {
       this.refs.playlist.getDOMNode().style.transition = "height 250ms ease-out";
     }
@@ -38,15 +38,15 @@ var Playlist = React.createClass({
 
     var position = this.props.position > 0 ? this.props.position : 0;
 
-    this.refs.playlist.getDOMNode().style.height = (this.props.playlistToggled) ?
-      liHeight * +this.props.playlist.length + 6 : liHeight * (this.props.playlist.length - position) + 6;
+    this.refs.playlist.getDOMNode().style.height = ((this.props.playlistToggled) ?
+      liHeight * +this.props.playlist.length + 6 : liHeight * (this.props.playlist.length - position) + 6) + "px";
 
   },
 
   ensureActiveSongOnTop: function(){
     var that = this;
 
-    this.refs.playlist.getDOMNode().style.height = liHeight * (this.props.playlist.length - this.props.position) + 6;
+    this.refs.playlist.getDOMNode().style.height = (liHeight * (this.props.playlist.length - this.props.position) + 6)+"px";
     this.animatedScrollTo(this.refs.playlist.getDOMNode(), this.getAutoScrollPosition(), 275);
   },
 

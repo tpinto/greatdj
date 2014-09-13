@@ -35,6 +35,10 @@ body, input, button, html {
   font-size:14px;
 }
 
+body {
+  margin-right: 10px;
+}
+
 span.it { font-style: italic; }
 
 table { font-size:1em; }
@@ -117,7 +121,7 @@ button {
 
 #search-component {
   float:left;
-  padding:20px;
+  padding:10px;
   width:65%;
 
   form {
@@ -128,7 +132,7 @@ button {
     color:white;
     top:0;
     left:0;
-    padding:0 8px;
+    padding:0 18px;
     line-height: @searchbar-height;
     height: @searchbar-height;
     width:100%;
@@ -137,7 +141,6 @@ button {
       display: inline-block;
       width:15%;
       text-align:left;
-      padding-left:32px; //20 (table) + 12 (pic)
       font-weight: 600;
       font-size: 1em;
       line-height: 32px;
@@ -281,7 +284,7 @@ button {
   }
 
   div.results-containter {
-    margin-top:@searchbar-height;
+    margin-top:@searchbar-height - 8;
 
     table.results {
       border-collapse: collapse;

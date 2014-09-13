@@ -17,16 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/dist', express.static(__dirname + '/dist'));
 app.use('/components', express.static(__dirname + '/components'));
 
-// development only
-// if ('development' == app.get('env')) {
-//   console.log('Development mode.');
-
-//   app.use(function(req, res, next){
-//     //console.log('%s %s', req.method, req.url);
-//     next();
-//   });
-// }
-
+// Routes
 app.post('/p', function(req, res){
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
