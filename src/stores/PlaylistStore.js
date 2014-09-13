@@ -60,6 +60,11 @@ AppDispatcher.register(function(payload) {
         /// tururur
       } else if(action.response.playlistId){
         saved(action.response.playlistId);
+
+        if(action.response.callback){
+          action.response.callback();
+        }
+
         PlaylistStore.emitChange();
       }
       break;

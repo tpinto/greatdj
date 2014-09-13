@@ -81,6 +81,7 @@ button {
   border:1px solid @gray-borders;
   cursor: pointer;
   padding:4px;
+  z-index:2;
   font-weight: 400;
   font-size:0.9em;
   border-radius:2px;
@@ -213,6 +214,7 @@ button {
 
     button {
       .tagSpan();
+      position:relative;
       color: white;
       cursor: pointer;
       border-top:0;
@@ -225,6 +227,25 @@ button {
       &.active {
         background: @accent;
         border-color: darken(@accent, 6.5%);
+      }
+
+      &:before {
+        font-family: FontAwesome;
+        display:inline-block;
+        width:20px;
+        font-style: normal;
+        text-align: left;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      &.save:before {
+        content: "\f0c7";
+      }
+
+      &.sync:before {
+        content: "\f021";
       }
     }
 
@@ -529,8 +550,9 @@ button {
 
 .tooltip {
   position:absolute;
+  z-index:1;
   max-width:250px;
-  margin-top: -10px;
+  margin-top: -8px;
   opacity:0;
 
   transition: opacity 250ms ease-out;

@@ -79,8 +79,8 @@ var StateHandler = React.createClass({
     });
   },
 
-  handleSavePlaylist: function(){
-    PlaylistActions.save(this.state.playlist, this.state.playlistId);
+  handleSavePlaylist: function(fn){
+    PlaylistActions.save(this.state.playlist, this.state.playlistId, fn);
   },
 
   render: function(){

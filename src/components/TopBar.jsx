@@ -30,12 +30,6 @@ var TopBar = React.createClass({
     };
   },
 
-  componentWillReceiveProps: function(nextProps){
-    if(nextProps.playlistId && !this.props.playlistId){
-      this.playlistSaved();
-    }
-  },
-
   handleSubmit: function(e){
     if(e) e.preventDefault();
 
@@ -120,7 +114,7 @@ var TopBar = React.createClass({
   },
 
   handleSavePlaylist: function(){
-    this.props.handleSavePlaylist();
+      this.props.handleSavePlaylist(this.playlistSaved);
   },
 
   playlistSaved: function(){
@@ -141,7 +135,7 @@ var TopBar = React.createClass({
         <div className="toolbox">
           <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
             <button className={this.props.sync ? 'sync active' : 'sync'} type="button" onClick={this.props.toggleSync}>
-              <i className="fa fa-refresh pre"></i> Party Mode
+              Party Mode
             </button>
           </OverlayTrigger>
 
@@ -152,9 +146,9 @@ var TopBar = React.createClass({
             </span>
           </OverlayTrigger>
 
-          <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved! You can now share this URL with others.</Tooltip>}>
-            <button className="save-button" type="button" onClick={this.handleSavePlaylist}>
-              <i className="fa fa-save pre"></i> Save
+          <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved. Share this URL with the world!</Tooltip>}>
+            <button className="save" type="button" onClick={this.handleSavePlaylist}>
+              Save
             </button>
           </OverlayTrigger>
         </div>

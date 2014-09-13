@@ -15,7 +15,7 @@ function dispatch(key, response, params) {
 }
 
 var Api = {
-  savePlaylist: function(pl, plId) {
+  savePlaylist: function(pl, plId, fn) {
     var key = Constants.PLAYLIST_SAVED;
     var params = {playlist: pl, id: plId};
 
@@ -26,7 +26,7 @@ var Api = {
       .send(params)
       .end(function(err, response){
         if(!err && response.body.id){
-          dispatch(key, {playlistId: response.body.id}, params);
+          dispatch(key, {playlistId: response.body.id, callback: fn}, params);
         } else {
           dispatch(key, Constants.request.ERROR, params);
         }

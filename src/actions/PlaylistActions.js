@@ -8,12 +8,12 @@ var PlaylistActions = {
   /**
    * @param  {string} text
    */
-  save: function(pl, plId) {
+  save: function(pl, plId, fn) {
     AppDispatcher.handleViewAction({
       actionType: Constants.PLAYLIST_SAVE
     });
 
-    Api.savePlaylist(pl, plId);
+    Api.savePlaylist(pl, plId, fn);
 
   },
 
