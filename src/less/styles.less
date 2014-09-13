@@ -222,11 +222,10 @@ button {
         margin-right:0;
       }
 
-      // i {
-      //   width:19px;
-      //   font-size:1.5em;
-      //   //line-height: @searchbar-height;
-      // }
+      &.active {
+        background: @accent;
+        border-color: darken(@accent, 6.5%);
+      }
     }
 
     span.playlist-id {
@@ -242,17 +241,6 @@ button {
         cursor: pointer;
 
         &:hover { color: white; }
-      }
-    }
-
-    span.sync {
-      .tagSpan();
-      float: right;
-      cursor: pointer;
-
-      &.active {
-        background: @accent;
-        border-color: darken(@accent, 6.5%);
       }
     }
 
