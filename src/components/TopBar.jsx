@@ -120,7 +120,12 @@ var TopBar = React.createClass({
   playlistSaved: function(){
     var that = this;
     this.refs.saveTooltip.show();
-    setTimeout(function(){ that.refs.saveTooltip.hide(); }, 4500);
+    this.refs.saveButton.getDOMNode().classList.add('saved');
+
+    setTimeout(function(){
+      that.refs.saveTooltip.hide();
+      that.refs.saveButton.getDOMNode().classList.remove('saved');
+    }, 4500);
   },
 
   render: function() {
@@ -147,7 +152,7 @@ var TopBar = React.createClass({
           </OverlayTrigger>
 
           <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved. Share this URL with the world!</Tooltip>}>
-            <button className="save" type="button" onClick={this.handleSavePlaylist}>
+            <button className="save" ref="saveButton" type="button" onClick={this.handleSavePlaylist}>
               Save
             </button>
           </OverlayTrigger>

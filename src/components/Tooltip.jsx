@@ -7,7 +7,7 @@ var React = require('react/addons');
 var Tooltip = React.createClass({
 
   addInClass: function(){
-    if(!this.getDOMNode().classList.contains('in'))
+    if(this.isMounted() && !this.getDOMNode().classList.contains('in'))
       this.getDOMNode().classList.add('in');
   },
 

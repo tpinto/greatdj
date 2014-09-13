@@ -244,8 +244,21 @@ button {
         content: "\f0c7";
       }
 
+      &.save.saved:before {
+        content: "\f00c";
+      }
+
       &.sync:before {
         content: "\f021";
+        transition: transform 450ms ease-out;
+        -webkit-transform-origin: 5px 6px;
+           -moz-transform-origin: 5px 6px;
+            -ms-transform-origin: 5px 6px;
+      }
+
+      &.sync.active:before {
+        content: "\f021";
+        transform: rotate(180deg);
       }
     }
 
