@@ -2,6 +2,7 @@ window.React = require('react');
 
 // some things should just work...
 NodeList.prototype.forEach = Array.prototype.forEach;
+HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
 // CustomEvent Polyfill for older browsers and IE

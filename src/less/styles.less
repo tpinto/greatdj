@@ -533,6 +533,39 @@ button {
   }
 }
 
+.tooltip {
+  position:absolute;
+  max-width:250px;
+  margin-top: -10px;
+  opacity:0;
+
+  transition: opacity 250ms ease-out;
+
+  &.in { opacity:1; }
+
+  &.save { width:75px; }
+
+  .tooltip-arrow {
+    border: 5px solid transparent;
+    border-bottom-color: rgba(0,0,0,0.85);
+    border-left-width: 4px;
+    border-right-width: 4px;
+    display: inline-block;
+    margin-bottom: -5px;
+    margin-top: -10px;
+    position:relative;
+    left:50%;
+  }
+
+  .tooltip-inner {
+    background:rgba(0,0,0,0.85);
+    color:#fafafa;
+    font-size:0.85em;
+    border-radius:2px;
+    padding:6px;
+  }
+}
+
 @media only screen
     and (min-device-width : 700px){
 

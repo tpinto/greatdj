@@ -5,6 +5,8 @@
 var React = require('react');
 
 var AutoComplete = require('./AutoComplete');
+var Tooltip = require('./Tooltip');
+var OverlayTrigger = require('./OverlayTrigger');
 var PlaylistActions = require('../actions/PlaylistActions');
 
 var request = require('superagent');
@@ -111,6 +113,14 @@ var TopBar = React.createClass({
     PlaylistActions.unsetPlaylistId();
   },
 
+  handleSavePlaylist: function(){
+    var that = this;
+
+    this.refs.saveTooltip.show();
+    this.props.handleSavePlaylist();
+    setTimeout(function(){ that.refs.saveTooltip.hide(); }, 4500);
+  },
+
   render: function() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -119,16 +129,27 @@ var TopBar = React.createClass({
         placeholder="Search for music videos here..." />
         <input type="submit" value="Search" />
         <input type="checkbox" value="HD Only" ref="hd" id="hd-checkbox" /><label htmlFor="hd-checkbox"> HD Only </label>
-        <button className="save-button" type="button" onClick={this.props.handleSavePlaylist}>
-          <i className="fa fa-save pre"></i> Save
-        </button>
-        <span className="playlist-id" style={this.props.playlistId ? {} : {display: 'none'}}>
-          {this.props.playlistId}
-          <i className="fa fa-times" onClick={this.unsetPlaylistId}></i>
-        </span>
-        <span className={this.props.sync ? 'sync active' : 'sync'} onClick={this.props.toggleSync}>
-          <i className="fa fa-refresh pre"></i> Party Mode
-        </span>
+
+        <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved! You can now share this URL with others.</Tooltip>}>
+          <button className="save-button" type="button" onClick={this.handleSavePlaylist}>
+            <i className="fa fa-save pre"></i> Save
+          </button>
+        </OverlayTrigger>
+
+        <OverlayTrigger placement="bottom" overlay={<Tooltip>Your playlist id. Click the <strong>x</strong> to go on a new one.</Tooltip>}>
+          <span className="playlist-id" style={this.props.playlistId ? {} : {display: 'none'}}>
+            {this.props.playlistId}
+            <i className="fa fa-times" onClick={this.unsetPlaylistId}></i>
+          </span>
+        </OverlayTrigger>
+
+
+        <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
+          <span className={this.props.sync ? 'sync active' : 'sync'} onClick={this.props.toggleSync}>
+            <i className="fa fa-refresh pre"></i> Party Mode
+          </span>
+        </OverlayTrigger>
+
         <AutoComplete
           complete={this.state.complete}
           selected={this.state.selected}
