@@ -1,11 +1,5 @@
 window.React = require('react');
 
-// document.write('<html><head><//head><body></body></html>');
-// document.querySelector('head').innerHTML += '<title>GreatDJ!</title><meta name="viewport" content="width=device-width, user-scalable=no">';
-// document.querySelector('head').innerHTML += '<meta name="description" content="Easily create, save and share playlists with music videos! Connect to a shared playlist to collaborate in realtime with your friends!">';
-// document.querySelector('head').innerHTML += '<meta name="og:title" content="GreatDJ! - Killer playlists for sharing and parties.">';
-// document.querySelector('head').innerHTML += '<meta name="og:type" content="website">';
-
 // some things should just work...
 NodeList.prototype.forEach = Array.prototype.forEach;
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
