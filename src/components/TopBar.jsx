@@ -30,6 +30,12 @@ var TopBar = React.createClass({
     };
   },
 
+  componentWillReceiveProps: function(nextProps){
+    if(nextProps.playlistId && !this.props.playlistId){
+      this.playlistSaved();
+    }
+  },
+
   handleSubmit: function(e){
     if(e) e.preventDefault();
 
@@ -114,10 +120,12 @@ var TopBar = React.createClass({
   },
 
   handleSavePlaylist: function(){
-    var that = this;
-
-    this.refs.saveTooltip.show();
     this.props.handleSavePlaylist();
+  },
+
+  playlistSaved: function(){
+    var that = this;
+    this.refs.saveTooltip.show();
     setTimeout(function(){ that.refs.saveTooltip.hide(); }, 4500);
   },
 
