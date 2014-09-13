@@ -130,25 +130,26 @@ var TopBar = React.createClass({
         <input type="submit" value="Search" />
         <input type="checkbox" value="HD Only" ref="hd" id="hd-checkbox" /><label htmlFor="hd-checkbox"> HD Only </label>
 
-        <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved! You can now share this URL with others.</Tooltip>}>
-          <button className="save-button" type="button" onClick={this.handleSavePlaylist}>
-            <i className="fa fa-save pre"></i> Save
-          </button>
-        </OverlayTrigger>
+        <div className="toolbox">
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
+            <button className={this.props.sync ? 'sync active' : 'sync'} type="button" onClick={this.props.toggleSync}>
+              <i className="fa fa-refresh pre"></i> Party Mode
+            </button>
+          </OverlayTrigger>
 
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>Your playlist id. Click the <strong>x</strong> to go on a new one.</Tooltip>}>
-          <span className="playlist-id" style={this.props.playlistId ? {} : {display: 'none'}}>
-            {this.props.playlistId}
-            <i className="fa fa-times" onClick={this.unsetPlaylistId}></i>
-          </span>
-        </OverlayTrigger>
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>Your playlist id. Click the <strong>x</strong> to go on a new one.</Tooltip>}>
+            <span className="playlist-id" style={this.props.playlistId ? {} : {display: 'none'}}>
+              {this.props.playlistId}
+              <i className="fa fa-times" onClick={this.unsetPlaylistId}></i>
+            </span>
+          </OverlayTrigger>
 
-
-        <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
-          <span className={this.props.sync ? 'sync active' : 'sync'} onClick={this.props.toggleSync}>
-            <i className="fa fa-refresh pre"></i> Party Mode
-          </span>
-        </OverlayTrigger>
+          <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved! You can now share this URL with others.</Tooltip>}>
+            <button className="save-button" type="button" onClick={this.handleSavePlaylist}>
+              <i className="fa fa-save pre"></i> Save
+            </button>
+          </OverlayTrigger>
+        </div>
 
         <AutoComplete
           complete={this.state.complete}

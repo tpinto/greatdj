@@ -157,6 +157,8 @@ button {
       line-height: normal;
       border-radius: 4px;
       margin-top: 13px;
+      margin-left:5px;
+      margin-right:5px;
       text-align: center;
       border-bottom:1px solid darken(@darker-primary, 5%);
       border-left:1px solid darken(@darker-primary, 5%);
@@ -206,13 +208,19 @@ button {
       vertical-align: middle;
     }
 
-    button.save-button {
+    div.toolbox { float:right; }
+
+    button {
       .tagSpan();
-      float: right;
       color: white;
       cursor: pointer;
       border-top:0;
       border-right:0;
+
+      &:last-child {
+        margin-right:0;
+      }
+
       // i {
       //   width:19px;
       //   font-size:1.5em;
@@ -224,8 +232,6 @@ button {
       .tagSpan();
       padding: 4px 22px 4px 8px;
       position:relative;
-      margin-right:12px;
-      float: right;
 
       i {
         color: #eee;
@@ -241,7 +247,6 @@ button {
     span.sync {
       .tagSpan();
       float: right;
-      margin-right:12px;
       cursor: pointer;
 
       &.active {
