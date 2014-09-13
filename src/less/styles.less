@@ -311,7 +311,7 @@ button {
 
   }
 
-  div.results-containter {
+  div.results-container {
     margin-top:@searchbar-height - 8;
 
     table.results {
@@ -607,7 +607,17 @@ button {
 
 .desktop { display: none  !important; }
 
-#search-component { width: 100%; }
+#search-component {
+  width: 100%;
+
+  div.results-container {
+    margin-top: 80px;
+  }
+
+  form .autocomplete {
+    width: 70%;
+  }
+}
 #player-component { width: 100%; }
 
 .autocomplete {width: 60%;}

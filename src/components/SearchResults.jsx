@@ -43,7 +43,7 @@ var SearchResults = React.createClass({
     }, this)
 
     return (
-      <div className="results-containter">
+      <div className="results-container">
         <table className="results">
           <thead>
           </thead>
