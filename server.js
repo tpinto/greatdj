@@ -37,6 +37,10 @@ app.get('/p', function(req, res){
 });
 
 app.get('*', function(req, res){
+  if(req.hostname.indexOf('greatdj.ruiramos.com') > -1){
+    res.redirect(301, 'http://great.dj' + req.path);
+  }
+
   res.sendFile(__dirname + "/index.html");
 });
 
