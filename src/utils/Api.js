@@ -4,7 +4,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var Constants = require('../constants/AppConstants');
 var io = require('socket.io-client');
 
-var socketIoUrl = (window.location.href.indexOf('localhost') >= 0 ? '' : 'http://greatdj.ruiramos.com:8090');
+var socketIoUrl = (window.location.href.indexOf('localhost') >= 0 ? '' : 'http://great.dj:8090');
 
 function dispatch(key, response, params) {
     var payload = {actionType: key, response: response};
