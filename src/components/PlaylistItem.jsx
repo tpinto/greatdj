@@ -76,6 +76,8 @@ var PlaylistItem = React.createClass({
   },
 
   handlePlayNow: function(e){
+    console.log('hi there');
+    console.log('handlePlayNow', e.target, e.target.tagName)
     if(e.target.tagName === 'SPAN' && e.target.classList.contains('delete')) return;
     this.props.handlePlayNow(this.props.position, this.props.video);
     return false;

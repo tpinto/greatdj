@@ -53,12 +53,12 @@ table { font-size:1em; }
   right:0;
   color:#333;
   padding:4px 10px 4px 22px;
-  background:#eee;
   font-size:12px;
-  border:1px solid #d0d0d0;
+  border:1px solid #cfcfcf;
+  background: @gray-lightest;
   text-decoration: none;
 
-  &:hover {text-decoration: underline;}
+  &:hover {background:darken(@gray-lightest, 5%);}
 
   &::before {
     position:absolute;
@@ -441,6 +441,7 @@ button {
       height: 42px;
       border-bottom:4px solid transparent;
       position:relative;
+      cursor:pointer;
 
       border-bottom: 1px solid #eaeaea;
       border-right: 1px solid #eaeaea;
@@ -450,11 +451,6 @@ button {
 
       &.animate-margin {
         transition: margin-bottom 250ms ease-out, height 300ms ease-out;
-      }
-
-      &:hover {
-       // background:@gray-borders;
-        cursor:pointer;
       }
 
       span {
