@@ -26,13 +26,21 @@ var StateHandler = React.createClass({
     PlaylistStore.addChangeListener(this._onChange);
 
     var url = urllite(document.location.href),
-        that = this;
+        that = this,
+        id;
 
-    if(url.pathname.length > 1){
+    if(window.playlists){
+      id = window.playlists[0];
+      history.pushState(null, null, '/'+id);
+
+      this.setState({sync: true});
+      PlaylistActions.sync(id);
+    } else if(url.pathname.length > 1){
       // do a server request with url.hash
-      var id = url.pathname.slice(1);
+      id = url.pathname.slice(1);
       PlaylistActions.load(id);
     }
+
   },
 
   setResults: function(res){
@@ -44,9 +52,9 @@ var StateHandler = React.createClass({
 
     if(sync){
       if(!this.state.playlistId)
-        PlaylistActions.save(this.state.playlist);
-
-      PlaylistActions.sync(this.state.playlistId);
+        PlaylistActions.createAndSync(this.state.playlist);
+      else
+        PlaylistActions.sync(this.state.playlistId);
 
     } else {
       PlaylistActions.unsync();
@@ -66,7 +74,7 @@ var StateHandler = React.createClass({
   playerReady: function(){
     var that = this;
     if(this.state.playlist.length){
-      setTimeout(function(){that.setPosition(0), 50});
+      setTimeout(function(){that.setPosition(that.state.position === -1 ? 0 : that.state.position), 50});
     }
   },
 

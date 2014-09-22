@@ -62,7 +62,8 @@ AppDispatcher.register(function(payload) {
         saved(action.response.playlistId);
 
         if(action.response.callback){
-          action.response.callback();
+          console.log('calling callback with ', action.response.playlistId)
+          action.response.callback(action.response.playlistId);
         }
 
         PlaylistStore.emitChange();

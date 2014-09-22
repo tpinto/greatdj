@@ -177,7 +177,7 @@ button {
 
     input[type="text"] {
       padding:5px;
-      width:50%;
+      width:47.5%;
       height: @searchinput-height;
       font-size:1.1em;
       border-radius:2px;
@@ -595,15 +595,19 @@ button {
   }
 }
 
-@media only screen
-    and (min-device-width : 700px){
+@media all and (max-width: 1175px) and (min-width : 900px) {
+  #search-component form input[type="text"] { width:35%; }
+}
+
+@media all
+    and (min-width : 900px){
 
   .mobile { display: none  !important; }
 
 }
 
-@media only screen
-    and (max-device-width : 700px){
+@media all
+    and (max-width : 900px){
 
 .desktop { display: none  !important; }
 
@@ -612,6 +616,11 @@ button {
 
   div.results-container {
     margin-top: 80px;
+
+    button {
+      min-width: 110px;
+      padding:5px;
+    }
   }
 
   form .autocomplete {
@@ -624,6 +633,18 @@ button {
 
 }
 
+@media all
+    and (max-width : 400px){
+
+  #search-component {
+    div.results-container {
+      button {
+        min-width: 65px;
+        padding:5px;
+      }
+    }
+  }
+}
 // Animations
 /* Chrome, Safari, Opera */
 @-webkit-keyframes saved {

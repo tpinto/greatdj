@@ -18,6 +18,20 @@ var PlaylistActions = {
   },
 
   /**
+   * @param  {string} text
+   */
+  createAndSync: function(pl) {
+    AppDispatcher.handleViewAction({
+      actionType: Constants.PLAYLIST_SAVE
+    });
+
+    Api.savePlaylist(pl, null, function(plId){
+      PlaylistActions.sync(plId);
+    });
+
+  },
+
+  /**
    * @param  {string} id
    */
   load: function(plId) {

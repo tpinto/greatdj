@@ -5,6 +5,8 @@ NodeList.prototype.forEach = Array.prototype.forEach;
 HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
+console.log(window.playlists);
+
 // CustomEvent Polyfill for older browsers and IE
 (function () {
   function CustomEvent ( event, params ) {

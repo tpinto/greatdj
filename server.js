@@ -5,8 +5,10 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var geoip = require('geoip-lite');
+var isMobile = require('ismobilejs');
 var db;
 var playlistController = {};
+var activeIpsController = {};
 var playlistClients = {};
 var latestVersion = {};
 
@@ -15,7 +17,10 @@ app.set('port', process.env.PORT || 8080);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/dist', express.static(__dirname + '/dist'));
+app.set('views', __dirname + '/');
 app.use('/components', express.static(__dirname + '/components'));
+app.set('view engine', 'html');
+app.engine('html', require('hbs').__express);
 
 // Routes
 app.post('/p', function(req, res){
@@ -37,7 +42,13 @@ app.get('/p', function(req, res){
 });
 
 app.get('*', function(req, res){
-  res.sendFile(__dirname + "/index.html");
+  if(isMobile(req.headers['user-agent']).any){
+    activeIpsController.getPlaylistId(req.headers['x-forwarded-for'] || req.connection.remoteAddress, function(ids){
+      res.render('index', {playlists: ids});
+    });
+  } else {
+    res.render('index', {});
+  }
 });
 
 // db - Mongo Connect
@@ -71,6 +82,8 @@ io.on('connection', function(socket){
       });
     }
 
+    activeIpsController.set(socket.request.connection.remoteAddress, data.id);
+
   });
 
   socket.on('disconnect', function(){
@@ -80,7 +93,7 @@ io.on('connection', function(socket){
       for (var i = playlistClients[plId].length - 1; i >= 0; i--) {
         if(playlistClients[plId][i] === socket){
           playlistClients[plId].splice(i, 1);
-          return;
+          break;
         }
       }
 
@@ -88,6 +101,7 @@ io.on('connection', function(socket){
         latestVersion[plId] = null;
       }
 
+      activeIpsController.unset(socket.request.connection.remoteAddress, plId);
       plId = null;
 
     }
@@ -100,9 +114,11 @@ io.on('connection', function(socket){
       for (var i = playlistClients[plId].length - 1; i >= 0; i--) {
         if(playlistClients[plId][i] === socket){
           playlistClients[plId].splice(i, 1);
-          return;
+          break;
         }
       }
+
+      activeIpsController.unset(socket.request.connection.remoteAddress, plId);
       plId = null;
     }
   });
@@ -145,6 +161,27 @@ playlistController.update = function(id, data, callback){
 playlistController.get = function(id, callback){
   db.collection('playlists').findOne({id: id}, function(err, item) {
     callback(item);
+  });
+};
+
+activeIpsController.set = function(ip, plId){
+  console.log(ip, 'connected to', plId);
+  var doc = {ip: ip, playlistId: plId};
+
+   db.collection('activeIps').update({ip: ip}, {$set: {playlistId: plId}}, {w:1, upsert: true}, function(err, result) {
+    console.log('registred ip ', ip, 'to', plId);
+  });
+};
+
+activeIpsController.unset = function(ip, plId){
+   db.collection('activeIps').remove({ip: ip, playlistId: plId}, function(err, result) {
+    console.log('deleted ip ', ip, 'from', plId);
+  });
+};
+
+activeIpsController.getPlaylistId = function(ip, fn){
+   db.collection('activeIps').find({ip: ip}).toArray(function(err, result) {
+    fn(result.map(function(el){ return el.playlistId; }));
   });
 };
 
