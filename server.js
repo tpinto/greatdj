@@ -164,19 +164,28 @@ playlistController.get = function(id, callback){
   });
 };
 
+activeIpsController.clients = {};
 activeIpsController.set = function(ip, plId){
   console.log(ip, 'connected to', plId);
   var doc = {ip: ip, playlistId: plId};
 
    db.collection('activeIps').update({ip: ip}, {$set: {playlistId: plId}}, {w:1, upsert: true}, function(err, result) {
+    activeIpsController[ip] = activeIpsController[ip] ? +activeIpsController[ip] + 1 : 1;
     console.log('registred ip ', ip, 'to', plId);
   });
+
 };
 
 activeIpsController.unset = function(ip, plId){
-   db.collection('activeIps').remove({ip: ip, playlistId: plId}, function(err, result) {
-    console.log('deleted ip ', ip, 'from', plId);
-  });
+  if(activeIpsController[ip]){
+    activeIpsController[ip] = +activeIpsController[ip] - 1;
+  }
+
+  if(!activeIpsController[ip])
+     db.collection('activeIps').remove({ip: ip, playlistId: plId}, function(err, result) {
+      delete activeIpsController[ip];
+      console.log('deleted ip ', ip, 'from', plId);
+    });
 };
 
 activeIpsController.getPlaylistId = function(ip, fn){

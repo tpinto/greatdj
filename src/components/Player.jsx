@@ -47,12 +47,16 @@ var Player = React.createClass({
   },
 
   _loadNewUrl: function(videoId) {
-    this.props.autoplay
-      ? this.state.player.loadVideoById(videoId, 0, "hd720")
-      : this.state.player.cueVideoById(videoId);
+    if(this.state.player.loadVideoById){
+      this.props.autoplay
+        ? this.state.player.loadVideoById(videoId, 0, "hd720")
+        : this.state.player.cueVideoById(videoId);
 
-    this.state.player.setPlaybackQuality("hd720");
-    this.refs.curtain.getDOMNode().style.display = 'none';
+      this.state.player.setPlaybackQuality("hd720");
+      this.refs.curtain.getDOMNode().style.display = 'none';
+    } else {
+      console.warn('* Player: Can\'t play yet!');
+    }
   },
 
   _restartCurrentVideo: function(){

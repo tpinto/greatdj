@@ -81,8 +81,7 @@ AppDispatcher.register(function(payload) {
       break;
 
     case Constants.PLAYLIST_CHANGE:
-            console.log('playlist change', action.response);
-
+      console.log('playlist change', action.response);
       loaded(action.response.playlist, action.response.playlistId, action.response.position);
       PlaylistStore.emitChange();
       break;
