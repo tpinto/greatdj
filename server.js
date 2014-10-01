@@ -24,7 +24,7 @@ app.engine('html', require('hbs').__express);
 
 // Routes
 app.post('/p', function(req, res){
-  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  var ip = getRemoteIpAddress(req);
 
   if(req.body.id){
     // update - just overwrite for now
@@ -43,8 +43,7 @@ app.get('/p', function(req, res){
 
 app.get('*', function(req, res){
   if(isMobile(req.headers['user-agent']).any){
-    console.log('mobile request from', req.headers['x-forwarded-for'].split(',')[0]);
-    activeIpsController.getPlaylistId(req.headers['x-forwarded-for'] || req.connection.remoteAddress, function(ids){
+    activeIpsController.getPlaylistId(getRemoteIpAddress(req), function(ids){
       res.render('index', {playlists: ids});
     });
   } else {
@@ -194,4 +193,10 @@ activeIpsController.getPlaylistId = function(ip, fn){
     fn(result.map(function(el){ return el.playlistId; }));
   });
 };
+
+// Utils - this file is getting ridiculous :(
+function getRemoteIpAddress(req){
+ // have to do it this way as it's being served by apache so remoteAddress would always be 127.0.0.1 ...
+ return req.headers['x-forwarded-for'].split(',')[0];
+}
 
