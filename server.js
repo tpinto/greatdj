@@ -64,6 +64,7 @@ io.on('connection', function(socket){
   // socket is the client socket
   // global vars that belong to each socket
   var plId;
+  var myIp;
 
   console.log(' * new connection');
 
@@ -83,6 +84,7 @@ io.on('connection', function(socket){
     }
 
     activeIpsController.set(socket.request.connection.remoteAddress, data.id);
+    myIp = socket.request.connection.remoteAddress;
 
   });
 
@@ -101,7 +103,7 @@ io.on('connection', function(socket){
         latestVersion[plId] = null;
       }
 
-      activeIpsController.unset(socket.request.connection.remoteAddress, plId);
+      activeIpsController.unset(myIp, plId);
       plId = null;
 
     }
