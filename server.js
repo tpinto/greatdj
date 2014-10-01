@@ -43,7 +43,7 @@ app.get('/p', function(req, res){
 
 app.get('*', function(req, res){
   if(isMobile(req.headers['user-agent']).any){
-    console.log('mobile request from', req.headers['x-forwarded-for'][0] || req.headers['x-forwarded-for']);
+    console.log('mobile request from', req.headers['x-forwarded-for'].split(',')[0]);
     activeIpsController.getPlaylistId(req.headers['x-forwarded-for'] || req.connection.remoteAddress, function(ids){
       res.render('index', {playlists: ids});
     });
