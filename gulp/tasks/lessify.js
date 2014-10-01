@@ -11,9 +11,9 @@ gulp.task('lessify', function () {
   gulp.src('./src/less/**/*.less')
     .pipe(sourcemaps.init())
     .pipe(less())
+    .on('error', handleErrors)
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/'))
-    .on('error', handleErrors)
     .on('end', bundleLogger.end);
-
 });
+
