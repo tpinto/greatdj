@@ -4,6 +4,9 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var Constants = require('../constants/AppConstants');
 var io = require('socket.io-client');
 
+// Youtube API Key
+var API_KEY = 'AIzaSyDLwX06yG_73ImDEubOb5Yv0E_U1iIdTJs';
+
 var socketIoUrl = (window.location.href.indexOf('localhost') >= 0 ? '' : 'http://great.dj:8090');
 
 function dispatch(key, response, params) {
@@ -51,7 +54,31 @@ var Api = {
           }
         });
 
-      }
+  },
+
+  searchForVideos: function(q, videoDef){
+    var key = Constants.SEARCH_SUCCESS;
+
+    request
+      .get('https://www.googleapis.com/youtube/v3/search')
+      .query({
+        key: API_KEY,
+        part: 'snippet',
+        q: q,
+        type: 'video',
+        maxResults: 20,
+        videoDefinition: videoDef
+      })
+      .end(function(err, response){
+        dispatch(key, {items: response.body.items});
+      });
+
+    request
+      .post('/s')
+      .send({term: q})
+      .end();
+
+  }
 };
 
 Api.io = {

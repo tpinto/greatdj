@@ -8,6 +8,7 @@ var AutoComplete = require('./AutoComplete');
 var Tooltip = require('./Tooltip');
 var OverlayTrigger = require('./OverlayTrigger');
 var PlaylistActions = require('../actions/PlaylistActions');
+var SearchActions = require('../actions/SearchActions');
 
 var request = require('superagent');
 
@@ -128,10 +129,16 @@ var TopBar = React.createClass({
     }, 4500);
   },
 
+  handleLogoClick: function(e){
+    e.preventDefault();
+    SearchActions.resetResults();
+    return false;
+  },
+
   render: function() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <span className="logo desktop"><a href="/">GREAT DJ<span className="it">!</span></a></span>
+        <span className="logo desktop"><a href="/" onClick={this.handleLogoClick}>GREAT DJ<span className="it">!</span></a></span>
         <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
         placeholder="Search for music videos here..." />
         <input type="submit" value="Search" />

@@ -6,6 +6,7 @@ var React = require('react');
 var request = require('superagent');
 
 var SearchResults = require('./SearchResults');
+var SearchActions = require('../actions/SearchActions');
 var ResultsComponent = require('./ResultsComponent');
 var TopBar = require('./TopBar');
 
@@ -39,19 +40,7 @@ var SearchComponent = React.createClass({
     var that = this,
         videoDef = hdOnly ? 'high' : 'any';
 
-    request
-      .get('https://www.googleapis.com/youtube/v3/search')
-      .query({
-        key: API_KEY,
-        part: 'snippet',
-        q: q,
-        type: 'video',
-        maxResults: 20,
-        videoDefinition: videoDef
-      })
-      .end(function(err, response){
-        that.props.setResults(response.body.items);
-      });
+    SearchActions.search(q, videoDef);
 
   },
 
@@ -65,8 +54,13 @@ var SearchComponent = React.createClass({
           unsetPlaylistId={this.props.unsetPlaylistId}
           toggleSync={this.props.toggleSync}
           sync={this.props.sync}
-          />
-        <SearchResults videos={this.props.results} enqueueHandler={this.videoEnqueued} playNowHandler={this.playNowHandler} />
+          currentQuery={this.props.currentQuery} />
+        <SearchResults
+          handleSubmitQuery={this.handleSubmit}
+          videos={this.props.results}
+          enqueueHandler={this.videoEnqueued}
+          playNowHandler={this.playNowHandler}
+          recentTerms={this.props.recentTerms} />
       </div>
     );
   },

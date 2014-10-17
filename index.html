@@ -19,6 +19,10 @@
 </body>
   <script>
   if('{{playlists}}')
-    window.playlists = '{{playlists}}'.split(',')</script>
+    window.playlists = '{{playlists}}'.split(',');
+
+  if('{{ recent }}')
+    window.recent = '{{recent}}'.split(',');
+  </script>
   <script type="text/javascript" src="dist/app.js"></script>
 </html>

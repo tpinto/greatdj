@@ -3,9 +3,7 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/AppConstants');
 var merge = require('react/lib/merge');
-var request = require('superagent');
-
-var CHANGE_EVENT = 'change';
+var CHANGE_EVENT = Constants.CHANGE_EVENT;
 
 var _playlist = [];
 var _playlistId = null;

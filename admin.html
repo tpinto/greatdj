@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GreatDJ! Backoffice</title>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+
+  <link rel="stylesheet" href="/dist/styles.css">
+
+</head>
+<body id="admin">
+<div class="top-bar">
+  <span class="logo">Great DJ Backoffice</span>
+</div>
+
+<div class="container">
+  <h3>Currently registred parties:</h3>
+  <table>
+    <tr>
+      <th>Id</th>
+      <th>Ip</th>
+      <th># Clients</th>
+      <th>Playlist Id</th>
+      <th>Operations</th>
+    </tr>
+    {{#each activeIps}}
+      <tr>
+        <td>{{this._id}}</td>
+        <td>{{this.ip}}</td>
+        <td>{{this.numClients}}</td>
+        <td>{{this.playlistId}}</td>
+        <td>
+          <button data-hook="show-playlist" data-id="{{this.playlistId}}"><i class="fa fa-bullhorn"></i> Show Playlist</button>
+          <button data-hook="delete-playlist" data-id="{{this._id}}" class="delete"><i class="fa fa-times"></i> Delete</button></td>
+      </tr>
+    {{/each}}
+  </table>
+</div>
+
+<script>
+  var app = {
+    init: function(){
+      document.querySelector('button[data-hook="show-playlist"]').addEventListener('click', app.showPlaylist.bind(app));
+      document.querySelector('button[data-hook="delete-playlist"]').addEventListener('click', app.deletePlaylist.bind(app));
+
+    },
+
+    // actions
+    deletePlaylist: function(e){
+      var id = e.target.attributes['data-id'].value;
+      // call a /delete/playlistId server endpoint
+        // var r = new XMLHttpRequest();
+        // r.open("POST", "/delete/"+id, true);
+        // r.send();
+
+        // e.target.parentNode.removeChildren() (?)
+
+    },
+
+    showPlaylist: function(e){
+      var id = e.target.attributes['data-id'].value;
+      window.open('/'+id, '_blank');
+    }
+
+  };
+
+  app.init();
+</script>
+
+</body>
+</html>

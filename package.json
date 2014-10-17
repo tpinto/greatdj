@@ -35,6 +35,7 @@
     "ismobilejs": "~0.3.3",
     "socket.io": "~1.1.0",
     "socket.io-client": "~1.1.0",
-    "hbs": "~2.7.0"
+    "hbs": "~2.7.0",
+    "basic-auth": "~1.0.0"
   }
 }

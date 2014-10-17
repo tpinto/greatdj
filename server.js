@@ -6,11 +6,15 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var geoip = require('geoip-lite');
 var isMobile = require('ismobilejs');
+var credentials = require('./auth.json');
+var auth = require('basic-auth');
+
 var db;
 var playlistController = {};
 var activeIpsController = {};
 var playlistClients = {};
 var latestVersion = {};
+var recentSearches = [];
 
 app.set('port', process.env.PORT || 8080);
 
@@ -37,8 +41,38 @@ app.post('/p', function(req, res){
   }
 });
 
+app.post('/s', function(req, res){
+  if(req.body.term){
+    if(recentSearches.indexOf(req.body.term)+1){ //exists
+      recentSearches.splice(recentSearches.indexOf(req.body.term), 1);
+      recentSearches.push(req.body.term);
+    } else {
+      recentSearches.push(req.body.term);
+      if(recentSearches.length > 10) recentSearches.shift();
+    }
+  }
+  console.log(recentSearches);
+});
+
 app.get('/p', function(req, res){
   playlistController.get(req.query.id, res.send.bind(res));
+});
+
+app.get('/admin', function(req, res){
+  var user = auth(req);
+
+  if(!user || !(user.name === credentials.username && user.pass === credentials.password)){
+    res.statusCode = 401;
+    res.setHeader('WWW-Authenticate', 'Basic realm="Authorization Required"');
+    res.end('Unauthorized');
+  } else {
+    activeIpsController.getAll(function(result){
+      result.forEach(function(party, i){
+        party.numClients = activeIpsController.clients[party.ip];
+      });
+      res.render('admin', {activeIps: result});
+    });
+  }
 });
 
 app.get('*', function(req, res){
@@ -47,7 +81,7 @@ app.get('*', function(req, res){
       res.render('index', {playlists: ids});
     });
   } else {
-    res.render('index', {});
+    res.render('index', {recent: recentSearches});
   }
 });
 
@@ -169,23 +203,24 @@ playlistController.get = function(id, callback){
 activeIpsController.clients = {};
 activeIpsController.set = function(ip, plId){
   console.log(ip, 'connected to', plId);
+  if(!ip && !plId) return;
   var doc = {ip: ip, playlistId: plId};
 
    db.collection('activeIps').update({ip: ip}, {$set: {playlistId: plId}}, {w:1, upsert: true}, function(err, result) {
-    activeIpsController[ip] = activeIpsController[ip] ? +activeIpsController[ip] + 1 : 1;
+    activeIpsController.clients[ip] = activeIpsController.clients[ip] ? +activeIpsController.clients[ip] + 1 : 1;
     console.log('registred ip ', ip, 'to', plId);
   });
 
 };
 
 activeIpsController.unset = function(ip, plId){
-  if(activeIpsController[ip]){
-    activeIpsController[ip] = +activeIpsController[ip] - 1;
+  if(activeIpsController.clients[ip]){
+    activeIpsController.clients[ip] = +activeIpsController.clients[ip] - 1;
   }
 
-  if(!activeIpsController[ip])
+  if(!activeIpsController.clients[ip])
      db.collection('activeIps').remove({ip: ip, playlistId: plId}, function(err, result) {
-      delete activeIpsController[ip];
+      delete activeIpsController.clients[ip];
       console.log('deleted ip ', ip, 'from', plId);
     });
 };
@@ -196,9 +231,15 @@ activeIpsController.getPlaylistId = function(ip, fn){
   });
 };
 
+activeIpsController.getAll = function(fn){
+   db.collection('activeIps').find().toArray(function(err, result) {
+    fn(result);
+  });
+};
+
 // Utils - this file is getting ridiculous :(
 function getRemoteIpAddress(req){
  // have to do it this way as it's being served by apache so remoteAddress would always be 127.0.0.1 ...
- return req.headers['x-forwarded-for'].split(',')[0];
+ return (req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0] : '127.0.0.1');
 }
 
