@@ -82,7 +82,7 @@ app.get('/admin', function(req, res){
 app.get('*', function(req, res){
   if(isMobile(req.headers['user-agent']).any){
     activeIpsController.getPlaylistId(getRemoteIpAddress(req), function(ids){
-      res.render('index', {playlists: ids});
+      res.render('index', {playlists: ids, recent: recentSearches});
     });
   } else {
     res.render('index', {recent: recentSearches});
