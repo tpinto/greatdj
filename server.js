@@ -55,6 +55,7 @@ app.post('/s', function(req, res){
       if(recentSearches.length > 10) recentSearches.shift();
     }
   }
+  res.send({ok: 'ok'});
 });
 
 app.get('/p', function(req, res){
