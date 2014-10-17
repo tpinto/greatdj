@@ -54,7 +54,8 @@ var SearchComponent = React.createClass({
           unsetPlaylistId={this.props.unsetPlaylistId}
           toggleSync={this.props.toggleSync}
           sync={this.props.sync}
-          currentQuery={this.props.currentQuery} />
+          currentQuery={this.props.currentQuery}
+          changeQuery={this.props.changeQuery} />
         <SearchResults
           handleSubmitQuery={this.handleSubmit}
           videos={this.props.results}

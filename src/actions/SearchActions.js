@@ -4,6 +4,14 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 
 var SearchActions = {
   search: function(q, videoDef){
+    AppDispatcher.handleViewAction({
+      actionType: Constants.QUERY,
+      response: {
+        query: q
+      }
+    });
+
+
     Api.searchForVideos(q, videoDef);
   },
 

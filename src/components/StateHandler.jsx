@@ -108,6 +108,11 @@ var StateHandler = React.createClass({
     return false;
   },
 
+  changeQuery: function(q){
+    console.log(q);
+    this.setState({currentQuery: q});
+  },
+
   render: function(){
     return (
       <div id="app">
@@ -122,6 +127,7 @@ var StateHandler = React.createClass({
             sync={this.state.sync}
             recentTerms={this.state.recentTerms}
             currentQuery={this.state.currentQuery}
+            changeQuery={this.changeQuery}
             />
         </div>
         <div id="player-component">

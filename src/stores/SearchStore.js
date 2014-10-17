@@ -65,6 +65,7 @@ AppDispatcher.register(function(payload) {
     break;
     case Constants.RESET_RESULTS:
       searchReturned([]);
+      setQuery('');
       SearchStore.emitChange();
     break;
     case Constants.RECENT_TERMS:

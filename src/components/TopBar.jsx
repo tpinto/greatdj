@@ -37,6 +37,7 @@ var TopBar = React.createClass({
     if(this.refs.query.getDOMNode().value.trim()){
       if(autoCompleteTimeout){
         clearTimeout(autoCompleteTimeout);
+        autoCompleteTimeout = null;
       }
 
       this.props.handleSubmit(this.refs.query.getDOMNode().value.trim(), this.refs.hd.getDOMNode().checked);
@@ -53,9 +54,11 @@ var TopBar = React.createClass({
     this.handleSubmit();
   },
 
-  handleInputChange: function(){
+  handleInputChange: function(e){
     var q = this.refs.query.getDOMNode().value.trim(),
         that = this;
+
+    this.props.changeQuery(q);
 
     if(autoCompleteTimeout){
       clearTimeout(autoCompleteTimeout);
@@ -100,6 +103,7 @@ var TopBar = React.createClass({
       this.setState({complete: [], selected: -1});
       return false;
     }
+
   },
 
   handleMouseEnterOption: function(e){
@@ -140,7 +144,7 @@ var TopBar = React.createClass({
       <form onSubmit={this.handleSubmit}>
         <span className="logo desktop"><a href="/" onClick={this.handleLogoClick}>GREAT DJ<span className="it">!</span></a></span>
         <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
-        placeholder="Search for music videos here..." />
+        placeholder="Search for music videos here..." value={this.props.currentQuery} />
         <input type="submit" value="Search" />
         <input type="checkbox" value="HD Only" ref="hd" id="hd-checkbox" /><label htmlFor="hd-checkbox"> HD Only </label>
 
