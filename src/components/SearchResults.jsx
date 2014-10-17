@@ -51,7 +51,7 @@ var SearchResults = React.createClass({
       return (
         <li><a onClick={this.handleSubmitQuery.bind(this, term)} href={ '/#' + term}>{ term }</a></li>
       );
-    }, this) : [<li><a href="#radiohead">radiohead</a></li>];
+    }, this) : [<li><a onClick={this.handleSubmitQuery.bind(this, 'radiohead')} href="#radiohead">radiohead</a></li>];
 
     recentSearches.reverse();
 
