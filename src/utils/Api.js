@@ -78,6 +78,15 @@ var Api = {
       .send({term: q})
       .end();
 
+  },
+
+  getRecentTerms: function(){
+    var key = Constants.RECENT_TERMS;
+    request
+      .get('/s')
+      .end(function(err, response){
+        dispatch(key, {terms: response.body.terms});
+      });
   }
 };
 

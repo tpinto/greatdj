@@ -41,6 +41,10 @@ app.post('/p', function(req, res){
   }
 });
 
+app.get('/s', function(req, res){
+  res.send({terms: recentSearches});
+});
+
 app.post('/s', function(req, res){
   if(req.body.term){
     if(recentSearches.indexOf(req.body.term)+1){ //exists
@@ -51,7 +55,6 @@ app.post('/s', function(req, res){
       if(recentSearches.length > 10) recentSearches.shift();
     }
   }
-  console.log(recentSearches);
 });
 
 app.get('/p', function(req, res){

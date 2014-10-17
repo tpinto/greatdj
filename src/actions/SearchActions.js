@@ -4,14 +4,6 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 
 var SearchActions = {
   search: function(q, videoDef){
-    // AppDispatcher.handleViewAction({
-    //   actionType: Constants.QUERY,
-    //   response: {
-    //     query: q,
-    //     videoDef: videoDef
-    //   }
-    // });
-
     Api.searchForVideos(q, videoDef);
   },
 
@@ -19,6 +11,9 @@ var SearchActions = {
     AppDispatcher.handleViewAction({
       actionType: Constants.RESET_RESULTS,
     });
+
+    Api.getRecentTerms();
+
   },
 };
 

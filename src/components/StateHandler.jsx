@@ -90,7 +90,8 @@ var StateHandler = React.createClass({
       position: PlaylistStore.getPosition(),
       sync: (PlaylistStore.getPlaylistId() ? this.state.sync : false),
       results: SearchStore.getVideos(),
-      currentQuery: SearchStore.getCurrentQuery()
+      currentQuery: SearchStore.getCurrentQuery(),
+      recentTerms: SearchStore.getRecentTerms(),
     });
   },
 

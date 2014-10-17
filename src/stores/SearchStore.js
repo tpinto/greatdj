@@ -8,6 +8,7 @@ var merge = require('react/lib/merge');
 
 var _videos = [];
 var _q;
+var _recent = window.recent;
 
 function searchReturned(terms){
   _videos = terms;
@@ -17,6 +18,10 @@ function setQuery(q){
   _q = q;
 }
 
+function setRecentTerms(t){
+  _recent = t;
+}
+
 var SearchStore = merge(EventEmitter.prototype, {
 
   getVideos: function(){
@@ -24,7 +29,7 @@ var SearchStore = merge(EventEmitter.prototype, {
   },
 
   getRecentTerms: function(){
-    return window.recent;
+    return _recent;
   },
 
   getCurrentQuery: function(){
@@ -60,6 +65,10 @@ AppDispatcher.register(function(payload) {
     break;
     case Constants.RESET_RESULTS:
       searchReturned([]);
+      SearchStore.emitChange();
+    break;
+    case Constants.RECENT_TERMS:
+      setRecentTerms(action.response.terms);
       SearchStore.emitChange();
     break;
 

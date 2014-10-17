@@ -11,6 +11,7 @@ module.exports = {
   CHANGE_EVENT: 'change_event',
   QUERY: 'query',
   RESET_RESULTS: 'RESET_RESULTS',
+  RECENT_TERMS: 'RECENT_TERMS',
   request: {
     PENDING: 'pending',
     COMPLETE: 'complete',
