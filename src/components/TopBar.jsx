@@ -55,7 +55,7 @@ var TopBar = React.createClass({
   },
 
   handleInputChange: function(e){
-    var q = this.refs.query.getDOMNode().value.trim(),
+    var q = this.refs.query.getDOMNode().value,
         that = this;
 
     this.props.changeQuery(q);
