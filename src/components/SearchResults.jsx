@@ -69,7 +69,7 @@ var SearchResults = React.createClass({
       );
     } else {
       return (
-        <div className="results-container">
+        <div className="results-container results-intro">
           <div className="intro">
             <h1>Create, save and share Youtube playlists, the easy way!</h1>
 
