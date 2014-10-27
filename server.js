@@ -248,7 +248,6 @@ function getRemoteIpAddress(req){
 }
 
 function passVar(object){
-  if(object instanceof Array && !object.length) return '';
   return new Buffer(JSON.stringify(object)).toString('base64');
 }
 
