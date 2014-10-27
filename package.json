@@ -37,5 +37,6 @@
     "socket.io-client": "~1.1.0",
     "hbs": "~2.7.0",
     "basic-auth": "~1.0.0"
-  }
+  },
+  "devDependencies": {}
 }

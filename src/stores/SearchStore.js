@@ -8,7 +8,7 @@ var merge = require('react/lib/merge');
 
 var _videos = [];
 var _q;
-var _recent = window.recent;
+var _recent = window.DATA.recent;
 
 function searchReturned(terms){
   _videos = terms;

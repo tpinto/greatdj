@@ -5,8 +5,6 @@ NodeList.prototype.forEach = Array.prototype.forEach;
 HTMLCollection.prototype.indexOf = Array.prototype.indexOf;
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
-console.log(window.playlists);
-
 // CustomEvent Polyfill for older browsers and IE
 (function () {
   function CustomEvent ( event, params ) {
@@ -29,6 +27,20 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 ga('create', 'UA-38568098-2', 'auto');
 ga('send', 'pageview');
+
+function receiveParams(obj){
+  var data = {};
+
+  for(var key in obj){
+    if(obj[key]){
+      console.log(obj[key]);
+      data[key] = JSON.parse(atob(obj[key]));
+    }
+  }
+
+  window.DATA = data;
+}
+receiveParams(window.RAW);
 
 // Start App
 require('./components/StateHandler');

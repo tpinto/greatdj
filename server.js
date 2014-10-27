@@ -82,10 +82,10 @@ app.get('/admin', function(req, res){
 app.get('*', function(req, res){
   if(isMobile(req.headers['user-agent']).any){
     activeIpsController.getPlaylistId(getRemoteIpAddress(req), function(ids){
-      res.render('index', {playlists: ids, recent: recentSearches});
+      res.render('index', {playlists: passVar(ids), recent: passVar(recentSearches)});
     });
   } else {
-    res.render('index', {recent: recentSearches});
+    res.render('index', {recent: passVar(recentSearches)});
   }
 });
 
@@ -245,5 +245,9 @@ activeIpsController.getAll = function(fn){
 function getRemoteIpAddress(req){
  // have to do it this way as it's being served by apache so remoteAddress would always be 127.0.0.1 ...
  return (req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0] : '127.0.0.1');
+}
+
+function passVar(object){
+  return new Buffer(JSON.stringify(object)).toString('base64');
 }
 

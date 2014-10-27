@@ -18,11 +18,10 @@
 <body>
 </body>
   <script>
-  if('{{playlists}}')
-    window.playlists = '{{playlists}}'.split(',');
-
-  if('{{ recent }}')
-    window.recent = '{{recent}}'.split(',');
+    window.RAW = {
+      playlists: '{{playlists}}',
+      recent: '{{recent}}'
+    };
   </script>
   <script type="text/javascript" src="dist/app.js"></script>
 </html>
