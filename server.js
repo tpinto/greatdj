@@ -82,10 +82,10 @@ app.get('/admin', function(req, res){
 app.get('*', function(req, res){
   if(isMobile(req.headers['user-agent']).any){
     activeIpsController.getPlaylistId(getRemoteIpAddress(req), function(ids){
-      res.render('index', {playlists: passVar(ids), recent: passVar(recentSearches)});
+      res.render('index', {data: passVar({playlists: ids, recent: recentSearches})});
     });
   } else {
-    res.render('index', {recent: passVar(recentSearches)});
+    res.render('index', {data: passVar({recent: recentSearches})});
   }
 });
 

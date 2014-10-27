@@ -28,19 +28,19 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', 'UA-38568098-2', 'auto');
 ga('send', 'pageview');
 
-function receiveParams(obj){
-  var data = {};
+// function receiveParams(obj){
+//   var data = {};
 
-  for(var key in obj){
-    if(obj[key]){
-      console.log(obj[key]);
-      data[key] = JSON.parse(atob(obj[key]));
-    }
-  }
+//   for(var key in obj){
+//     if(obj[key]){
+//       console.log(key, obj[key]);
+//       data[key] = obj[key];
+//     }
+//   }
 
-  window.DATA = data;
-}
-receiveParams(window.RAW);
+//   window.DATA = data;
+// }
+window.DATA = JSON.parse(atob(window.RAW));
 
 // Start App
 require('./components/StateHandler');
