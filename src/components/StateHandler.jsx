@@ -37,7 +37,7 @@ var StateHandler = React.createClass({
         that = this,
         id;
 
-    if(window.DATA.playlists){
+    if(window.DATA.playlists && window.DATA.playlists.length){
       id = window.DATA.playlists[0];
       history.pushState(null, null, '/'+id);
 
