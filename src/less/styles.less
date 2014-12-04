@@ -47,6 +47,14 @@ table { font-size:1em; }
 
 #app { overflow: auto; }
 
+.well {
+  clear:both;
+  margin:20px;
+  padding: 12px;
+  background: #fafafa;
+  border-radius:2px;
+}
+
 a {
   transition: color 250ms ease-out;
   color:#00E;
@@ -353,7 +361,7 @@ button {
     margin-top:@searchbar-height - 8;
 
     &.results-intro {
-      max-width: 900px;
+      //max-width: 900px;
       margin: 0px auto;
     }
 
@@ -441,14 +449,15 @@ button {
         margin: 0;
         color: black;
         font-weight: 400;
+        clear:both;
         span {
           position:relative;
           z-index:55;
         }
       }
       .box {
-        width:45%;
-        margin:48px 2.5%;
+        width:30%;
+        margin:48px 1.5%;
         padding:12px;
         color:#666;
         float:left;

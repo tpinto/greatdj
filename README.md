@@ -1,13 +1,11 @@
 Killer playlists for parties!
 
 GreatDJ was originally about searching Youtube and creating playlists on the fly that play automatically.
-Lately, though, it has become all sorts of cool/weird things:
+Lately, though, it has grown a bit:
 
  * You can save playlists, it creates a unique URL you can share with your best best friends (beware, though, saving overwrites!)
- * It has a party mode, disabled by default, which syncs the playlist and playing position across all the devices in this mode currently accessing that playlist. Useful, for instance, if you have it playing in a computer and want to push some tunes using your phone. Or your friend's phone. Or if there's dozens of you trying to get your songs to play at the same time!
- * If you access the root URL (great.dj) with a phone and there are any other clients connected in a playlist in party mode, you'll be redirected to this playlist so you can push songs straight away!
- * If you enable party mode, if there are other clients connected you'll sync with the latest version they have, which might be different from the one saved in the server. If you don't enable party mode, you'll always get the saved version.
- * This might all change, I'm not sure.
+ * It has a party mode which syncs the playlist and playing position across all the devices in this mode currently accessing that playlist. Useful, for instance, if you have it playing in a computer and want to push some tunes using your phone. Or your friend's phone. Or if there's dozens of you trying to get your songs to play at the same time!
+ * If you access the root URL (great.dj) with a phone and there are any other clients connected in a playlist in party mode in the same network, you'll be redirected to this playlist so you can push songs straight away!
 
 Built using Facebook's React, Socket.IO, Browserify, Gulp and a bunch of other cool tech.
 Requires MongoDB for saving and loading playlists.
