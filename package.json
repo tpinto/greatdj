@@ -21,7 +21,7 @@
     "pretty-hrtime": "~0.2.1",
     "gulp-notify": "~1.4.2",
     "gulp-sourcemaps": "~1.1.1",
-    "react": "~0.11.1",
+    "react": "~0.11.2",
     "reactify": "~0.14.0",
     "require-sdk": "0.0.2",
     "superagent": "~0.18.2",
