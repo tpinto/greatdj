@@ -13,6 +13,12 @@ var SearchActions = {
 
     var id;
     if((id = q.match(/.*facebook.com\/(.*)\/?/))) {
+
+      if(id[1].indexOf('pages') === 0){
+        // got more work to do
+        id = id[1].match(/pages\/.*\/(.*)\/?/);
+      }
+
       // getting videos from a facebook page
       Api.getFacebookPageVideos(id[1]);
     } else {

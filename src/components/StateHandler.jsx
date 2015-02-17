@@ -58,7 +58,6 @@ var StateHandler = React.createClass({
     // using hashchanges for the query searches
     window.onhashchange = function(){
       var q = location.hash.slice(1);
-      console.log(that.state.hdOnly)
       if(q){
         SearchActions.search(q, that.state.hdOnly ? 'high' : 'any');
       } else {
@@ -66,6 +65,12 @@ var StateHandler = React.createClass({
       }
     }
 
+  },
+
+  componentDidMount: function(){
+    if(location.hash){
+      window.dispatchEvent(new CustomEvent('hashchange'));
+    }
   },
 
   toggleSync: function(){
