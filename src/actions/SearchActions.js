@@ -11,8 +11,14 @@ var SearchActions = {
       }
     });
 
-
-    Api.searchForVideos(q, videoDef);
+    var id;
+    if((id = q.match(/.*facebook.com\/(.*)\/?/))) {
+      // getting videos from a facebook page
+      Api.getFacebookPageVideos(id[1]);
+    } else {
+      // good old youtube search
+      Api.searchForVideos(q, videoDef);
+    }
   },
 
   resetResults: function(){

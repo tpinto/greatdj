@@ -40,7 +40,9 @@ var TopBar = React.createClass({
         autoCompleteTimeout = null;
       }
 
-      this.props.handleSubmit(this.refs.query.getDOMNode().value.trim(), this.refs.hd.getDOMNode().checked);
+      var q = this.refs.query.getDOMNode().value.trim();
+      location.hash = q;
+
     }
 
     // reset autocomplete
@@ -119,7 +121,7 @@ var TopBar = React.createClass({
   },
 
   handleSavePlaylist: function(){
-      this.props.handleSavePlaylist(this.playlistSaved);
+    this.props.handleSavePlaylist(this.playlistSaved);
   },
 
   playlistSaved: function(){
@@ -135,8 +137,13 @@ var TopBar = React.createClass({
 
   handleLogoClick: function(e){
     e.preventDefault();
-    SearchActions.resetResults();
+    location.hash = '';
     return false;
+  },
+
+  handleHdOnlyChange: function(e){
+    var hd = e.target.checked;
+    this.props.setHdOnly(hd);
   },
 
   render: function() {
@@ -146,7 +153,7 @@ var TopBar = React.createClass({
         <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
         placeholder="Search for music videos here..." value={this.props.currentQuery} />
         <input type="submit" value="Search" />
-        <input type="checkbox" value="HD Only" ref="hd" id="hd-checkbox" /><label htmlFor="hd-checkbox"> HD Only </label>
+        <input type="checkbox" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} /><label htmlFor="hd-checkbox"> HD Only </label>
 
         <div className="toolbox">
           <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>

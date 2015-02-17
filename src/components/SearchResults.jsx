@@ -15,11 +15,6 @@ var SearchResults = React.createClass({
     return false;
   },
 
-  handleSubmitQuery: function(term){
-    this.props.handleSubmitQuery(term);
-    return false;
-  },
-
   render: function() {
     var resultsList = this.props.videos.map(function(res, i){
       var rowClassName = 'row ' + (i % 2 ? 'odd' : 'even');
@@ -49,9 +44,9 @@ var SearchResults = React.createClass({
 
     var recentSearches = this.props.recentTerms ? this.props.recentTerms.map(function(term){
       return (
-        <li><a onClick={this.handleSubmitQuery.bind(this, term)} href={ '/#' + term}>{ term }</a></li>
+        <li><a href={ '#' + term}>{ term }</a></li>
       );
-    }, this) : [<li><a onClick={this.handleSubmitQuery.bind(this, 'radiohead')} href="#radiohead">radiohead</a></li>];
+    }, this) : [<li><a href="#radiohead">radiohead</a></li>];
 
     recentSearches.reverse();
 

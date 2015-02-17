@@ -80,6 +80,19 @@ var Api = {
 
   },
 
+  getFacebookPageVideos: function(id){
+    var key = Constants.SEARCH_SUCCESS;
+
+    request
+      .post('/fb_s')
+      .send({
+        id: id,
+      })
+      .end(function(err, response){
+        dispatch(key, {items: response.body.items});
+      });
+  },
+
   getRecentTerms: function(){
     var key = Constants.RECENT_TERMS;
     request

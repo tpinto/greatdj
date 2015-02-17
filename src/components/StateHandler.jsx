@@ -12,6 +12,7 @@ var FeedbackComponent = require('./FeedbackComponent');
 var PlaylistStore = require('../stores/PlaylistStore');
 var SearchStore = require('../stores/SearchStore');
 var PlaylistActions = require('../actions/PlaylistActions');
+var SearchActions = require('../actions/SearchActions');
 
 var ReactTransitionGroup = React.addons.TransitionGroup;
 
@@ -25,7 +26,8 @@ var StateHandler = React.createClass({
       playlistId: PlaylistStore.getPlaylistId(),
       sync: false,
       currentQuery: SearchStore.getCurrentQuery(),
-      showFeedbackForm: false
+      showFeedbackForm: false,
+      hdOnly: false
     }
   },
 
@@ -37,6 +39,8 @@ var StateHandler = React.createClass({
         that = this,
         id;
 
+    // if you're accessing via a mobile device and there are parties for your IP
+    // you'll be automatically added to the party
     if(window.DATA.playlists && window.DATA.playlists.length){
       id = window.DATA.playlists[0];
       history.pushState(null, null, '/'+id);
@@ -45,9 +49,21 @@ var StateHandler = React.createClass({
       PlaylistActions.sync(id);
 
     } else if(url.pathname.length > 1){
+      // direct link to a playlist
       // do a server request with url.hash
       id = url.pathname.slice(1);
       PlaylistActions.load(id);
+    }
+
+    // using hashchanges for the query searches
+    window.onhashchange = function(){
+      var q = location.hash.slice(1);
+      console.log(that.state.hdOnly)
+      if(q){
+        SearchActions.search(q, that.state.hdOnly ? 'high' : 'any');
+      } else {
+        SearchActions.resetResults();
+      }
     }
 
   },
@@ -109,8 +125,12 @@ var StateHandler = React.createClass({
   },
 
   changeQuery: function(q){
-    console.log(q);
     this.setState({currentQuery: q});
+  },
+
+  setHdOnly: function(hdOnly){
+    this.setState({hdOnly: hdOnly});
+    SearchActions.search(this.state.currentQuery, hdOnly ? 'high' : 'any');
   },
 
   render: function(){
@@ -128,6 +148,7 @@ var StateHandler = React.createClass({
             recentTerms={this.state.recentTerms}
             currentQuery={this.state.currentQuery}
             changeQuery={this.changeQuery}
+            setHdOnly={this.setHdOnly}
             />
         </div>
         <div id="player-component">

@@ -8,6 +8,7 @@ var geoip = require('geoip-lite');
 var isMobile = require('ismobilejs');
 var credentials = require('./auth.json');
 var auth = require('basic-auth');
+var request = require('superagent');
 
 var db;
 var playlistController = {};
@@ -15,6 +16,8 @@ var activeIpsController = {};
 var playlistClients = {};
 var latestVersion = {};
 var recentSearches = [];
+var fbToken;
+var graphApi = 'https://graph.facebook.com/';
 
 app.set('port', process.env.PORT || 8080);
 
@@ -27,6 +30,11 @@ app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 
 // Routes
+
+/**
+  POST /p
+  Saves (or overrides) a playlist.
+**/
 app.post('/p', function(req, res){
   var ip = getRemoteIpAddress(req);
 
@@ -41,10 +49,10 @@ app.post('/p', function(req, res){
   }
 });
 
-app.get('/s', function(req, res){
-  res.send({terms: recentSearches});
-});
-
+/**
+  POST /s
+  Saves a new recent search.
+**/
 app.post('/s', function(req, res){
   if(req.body.term){
     if(recentSearches.indexOf(req.body.term)+1){ //exists
@@ -58,10 +66,68 @@ app.post('/s', function(req, res){
   res.send({ok: 'ok'});
 });
 
+/**
+  POST /fb_s
+  Queries a Facebook page for posts and returns an array of Youtube videos.
+**/
+app.post('/fb_s', function(req, res){
+  var result = {items: []};
+
+  if(req.body.id){
+    request
+      .get(graphApi + 'v2.2/' + req.body.id + '/posts')
+      .query({access_token: fbToken})
+      .accept('json')
+      .end(function(err, response){
+        if(err){
+          return res.send(result);
+        }
+
+        result.items = response.body.data
+          .filter(function(post){
+            return post.link && post.link.match(/youtube.com\/watch/);
+          })
+          .map(function(ytpost){
+            var id = ytpost.link.match(/youtube.com\/watch\?v=(.*)/)[1];
+            return {
+              id: {videoId: id},
+              snippet: {
+                title: ytpost.name,
+                thumbnails: {
+                  medium: {url: ytpost.picture}
+                }
+              }
+            };
+          });
+
+        res.send(result);
+
+      });
+  } else {
+    res.send({error: 'Required parameter id missing!'});
+  }
+});
+
+/**
+  GET /p
+  Gets a saved playlist by query id.
+**/
 app.get('/p', function(req, res){
   playlistController.get(req.query.id, res.send.bind(res));
 });
 
+/**
+  GET /s
+  Gets all the recently saved searches.
+**/
+app.get('/s', function(req, res){
+  res.send({terms: recentSearches});
+});
+
+/**
+  GET /admin
+  Admin stuff.
+**/
 app.get('/admin', function(req, res){
   var user = auth(req);
 
@@ -79,6 +145,10 @@ app.get('/admin', function(req, res){
   }
 });
 
+/**
+  GET *
+  Everything else - serves index.html.
+**/
 app.get('*', function(req, res){
   if(isMobile(req.headers['user-agent']).any){
     activeIpsController.getPlaylistId(getRemoteIpAddress(req), function(ids){
@@ -251,3 +321,17 @@ function passVar(object){
   return new Buffer(JSON.stringify(object)).toString('base64');
 }
 
+
+// Generate FB Access Token
+request
+  .get(graphApi + 'oauth/access_token')
+  .query({
+    'grant_type': 'client_credentials',
+    'client_id': credentials.fb_app,
+    'client_secret': credentials.fb_secret
+  })
+  .end(function(err, response){
+    var id = response.text.split('=')[1];
+    console.log(' * got fb access token', id);
+    fbToken = id;
+  });
