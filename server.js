@@ -79,7 +79,7 @@ app.post('/fb_s', function(req, res){
       .query({access_token: fbToken})
       .accept('json')
       .end(function(err, response){
-        if(err){
+        if(err || !response.body || !response.body.data){
           return res.send(result);
         }
 
