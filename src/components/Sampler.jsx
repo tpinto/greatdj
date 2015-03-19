@@ -12,6 +12,7 @@ var Sampler = React.createClass({
   },
 
   handleKeyDown: function(e){
+    if(e.target !== document.body) return;
     switch(e.which){
       case 72:
         this.playSound(hornMp3, 'horn', 0.2);
