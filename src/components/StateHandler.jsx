@@ -2,19 +2,21 @@
   * @jsx React.DOM
   */
 
-var React = require('react');
-var urllite = require('urllite');
-var isMobile = require('ismobilejs');
+var React = require('react'),
+    urllite = require('urllite'),
+    isMobile = require('ismobilejs');
 
-var SearchComponent = require('./SearchComponent');
-var ResultsComponent = require('./ResultsComponent');
-var FeedbackComponent = require('./FeedbackComponent');
-var PlaylistStore = require('../stores/PlaylistStore');
-var SearchStore = require('../stores/SearchStore');
-var PlaylistActions = require('../actions/PlaylistActions');
-var SearchActions = require('../actions/SearchActions');
+var SearchComponent = require('./SearchComponent'),
+    ResultsComponent = require('./ResultsComponent'),
+    FeedbackComponent = require('./FeedbackComponent'),
+    Sampler = require('./Sampler');
 
-var ReactTransitionGroup = React.addons.TransitionGroup;
+var PlaylistStore = require('../stores/PlaylistStore'),
+    SearchStore = require('../stores/SearchStore');
+
+var PlaylistActions = require('../actions/PlaylistActions'),
+    SearchActions = require('../actions/SearchActions');
+
 
 var StateHandler = React.createClass({
   getInitialState: function(){
@@ -40,7 +42,7 @@ var StateHandler = React.createClass({
         id;
 
     // if you're accessing via a mobile device and there are parties for your IP
-    // you'll be automatically added to the party
+    // you'll be automatically added to the parteh
     if(window.DATA.playlists && window.DATA.playlists.length){
       id = window.DATA.playlists[0];
       history.pushState(null, null, '/'+id);
@@ -171,6 +173,7 @@ var StateHandler = React.createClass({
           show={this.state.showFeedbackForm}
           handleDispose={this.hideFeedbackForm}
         />
+        <Sampler />
       </div>
     )
   }

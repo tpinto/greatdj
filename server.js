@@ -24,6 +24,7 @@ app.set('port', process.env.PORT || 8080);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/dist', express.static(__dirname + '/dist'));
+app.use('/static', express.static(__dirname + '/static'));
 app.set('views', __dirname + '/');
 app.use('/components', express.static(__dirname + '/components'));
 app.set('view engine', 'html');
