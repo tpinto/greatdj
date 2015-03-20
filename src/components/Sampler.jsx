@@ -2,7 +2,8 @@ var React = require('react');
 
 var hornMp3 = '/static/audio/horn.mp3',
     stabMp3 = '/static/audio/orch5.wav',
-    rimshotMp3 = '/static/audio/rimshot.mp3';
+    rimshotMp3 = '/static/audio/rimshot.mp3',
+    cowbellMp3 = '/static/audio/cowbell.mp3';
 
 var sounds = {};
 
@@ -23,6 +24,9 @@ var Sampler = React.createClass({
         break;
       case 82: // r
         this.playSound(rimshotMp3, 'rimshot');
+        break;
+      case 67: // c
+        this.playSound(cowbellMp3, 'cowbell');
         break;
     }
   },
