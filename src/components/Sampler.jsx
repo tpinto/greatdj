@@ -1,7 +1,8 @@
 var React = require('react');
 
-var hornMp3 = '/static/audio/horn.mp3';
-    stabMp3 = '/static/audio/orch5.wav';
+var hornMp3 = '/static/audio/horn.mp3',
+    stabMp3 = '/static/audio/orch5.wav',
+    rimshotMp3 = '/static/audio/rimshot.mp3';
 
 var sounds = {};
 
@@ -14,11 +15,14 @@ var Sampler = React.createClass({
   handleKeyDown: function(e){
     if(e.target !== document.body) return;
     switch(e.which){
-      case 72:
+      case 72: // h
         this.playSound(hornMp3, 'horn', 0.2);
         break;
-      case 79:
+      case 79: // o
         this.playSound(stabMp3, 'stab');
+        break;
+      case 82: // r
+        this.playSound(rimshotMp3, 'rimshot');
         break;
     }
   },
