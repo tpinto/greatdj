@@ -1,9 +1,14 @@
 var React = require('react');
 
-var hornMp3 = '/static/audio/horn.mp3',
-    stabMp3 = '/static/audio/orch5.wav',
-    rimshotMp3 = '/static/audio/rimshot.mp3',
-    cowbellMp3 = '/static/audio/cowbell.mp3';
+var soundFiles = {
+  horn: '/static/audio/horn.mp3',
+  stab: '/static/audio/orch5.wav',
+  rimshot: '/static/audio/rimshot.mp3',
+  cowbell: '/static/audio/cowbell.mp3',
+  gun: '/static/audio/gun.mp3',
+  reload: '/static/audio/reload.wav',
+  machinegun: '/static/audio/machinegun.mp3'
+}
 
 var sounds = {};
 
@@ -17,27 +22,36 @@ var Sampler = React.createClass({
     if(e.target !== document.body) return;
     switch(e.which){
       case 72: // h
-        this.playSound(hornMp3, 'horn', 0.2);
+        this.playSound('horn', 0.2);
         break;
       case 79: // o
-        this.playSound(stabMp3, 'stab');
+        this.playSound('stab', 0.1);
         break;
       case 82: // r
-        this.playSound(rimshotMp3, 'rimshot');
+        this.playSound('rimshot');
         break;
       case 67: // c
-        this.playSound(cowbellMp3, 'cowbell');
+        this.playSound('cowbell');
+        break;
+      case 71: // g
+        this.playSound('gun');
+        break;
+      case 77: // m
+        this.playSound('machinegun');
+        break;
+      case 69: // e
+        this.playSound('reload');
         break;
     }
   },
 
-  playSound: function(mp3, soundId, start){
+  playSound: function(soundId, start){
     start = start || 0;
     if(sounds[soundId]){
       sounds[soundId].currentTime = start;
       sounds[soundId].play();
     } else {
-      sounds[soundId] = new Audio(mp3);
+      sounds[soundId] = new Audio(soundFiles[soundId]);
       sounds[soundId].play();
     }
   },

@@ -102,7 +102,9 @@ var StateHandler = React.createClass({
   playerReady: function(){
     var that = this;
     if(this.state.playlist.length){
-      setTimeout(function(){that.setPosition(that.state.position === -1 ? 0 : that.state.position), 50});
+      setTimeout(function(){
+        that.setPosition(that.state.position === -1 ? 0 : that.state.position);
+      }, 50);
     }
   },
 
