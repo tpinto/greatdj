@@ -3,8 +3,7 @@ var Constants = require('../constants/AppConstants');
 var CHANGE_EVENT = Constants.CHANGE_EVENT;
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
-var merge = require('react/lib/merge');
-
+var objectAssign = require('object-assign');
 
 var _videos = [];
 var _q;
@@ -22,7 +21,7 @@ function setRecentTerms(t){
   _recent = t;
 }
 
-var SearchStore = merge(EventEmitter.prototype, {
+var SearchStore = objectAssign(EventEmitter.prototype, {
 
   getVideos: function(){
     return _videos;

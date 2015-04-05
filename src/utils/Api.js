@@ -80,6 +80,19 @@ var Api = {
 
   },
 
+  getVideosFromUrl: function(url){
+    var key = Constants.SEARCH_SUCCESS;
+
+    request
+      .post('/url_s')
+      .send({
+        url: url,
+      })
+      .end(function(err, response){
+        dispatch(key, {items: response.body.items});
+      });
+  },
+
   getFacebookPageVideos: function(id){
     var key = Constants.SEARCH_SUCCESS;
 

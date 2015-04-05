@@ -2,8 +2,8 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/AppConstants');
-var merge = require('react/lib/merge');
 var CHANGE_EVENT = Constants.CHANGE_EVENT;
+var objectAssign = require('object-assign');
 
 var _playlist = [];
 var _playlistId = null;
@@ -20,7 +20,7 @@ function loaded(pl, plId, pos){
   _position = (pos === undefined ? _position : pos); // zero is a valid value!
 }
 
-var PlaylistStore = merge(EventEmitter.prototype, {
+var PlaylistStore = objectAssign(EventEmitter.prototype, {
 
   getPlaylist: function(){
     return _playlist;

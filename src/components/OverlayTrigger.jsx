@@ -39,7 +39,7 @@ var OverlayTrigger = React.createClass({
       this._mountOverlayTarget();
     }
 
-    this._overlayInstance = React.renderComponent(this.renderOverlay(), this._overlayTarget);
+    this._overlayInstance = React.render(this.renderOverlay(), this._overlayTarget);
   },
 
   show: function () {

@@ -18,6 +18,7 @@ gulp.task('browserify-react', function() {
 
   var fn = (global.isWatching) ? watchify : function(fn){ return fn; };
   console.log(global.isWatching)
+  console.log(reactify);
 
   var bundler = fn(browserify({
     transform: ['reactify'],

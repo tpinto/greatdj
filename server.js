@@ -18,6 +18,8 @@ var latestVersion = {};
 var recentSearches = [];
 var fbToken;
 var graphApi = 'https://graph.facebook.com/';
+var youTubeListApi = 'https://www.googleapis.com/youtube/v3/videos';
+var youtubeApiKey = 'AIzaSyBOUg2rsWYmnU627izv30PK60ctKzw9h9k';
 
 app.set('port', process.env.PORT || 8080);
 
@@ -91,7 +93,7 @@ app.post('/fb_s', function(req, res){
           .map(function(ytpost){
             var id = ytpost.link.match(/youtube.com\/watch\?v=(.*)/)[1];
             return {
-              id: {videoId: id},
+              id: id,
               snippet: {
                 title: ytpost.name,
                 thumbnails: {
@@ -108,6 +110,45 @@ app.post('/fb_s', function(req, res){
     res.send({error: 'Required parameter id missing!'});
   }
 });
+
+/**
+  POST /url_s
+  Parses a web page returning all Youtube videos it finds along the way.
+**/
+app.post('/url_s', function(req, res){
+  var result = {items: []};
+
+  if(req.body.url){
+    request
+      .get(req.body.url)
+      .end(function(err, response){
+        var videos = response.text.match(/youtube.com\/embed\/(.*)\?/g);
+
+        if(!videos){
+          res.send(result);
+          return;
+        }
+
+        var ids = videos.map(function(vid){
+            return vid.match(/youtube.com\/embed\/(.*)\?/)[1];
+          }).join(',');
+
+        request.get(youTubeListApi)
+          .accept('json')
+          .query({
+            part: 'snippet',
+            id: ids,
+            key: youtubeApiKey
+          }).end(function(e, response){
+            result.items = response.body.items;
+            res.send(result);
+          });
+      });
+  } else {
+    res.send({error: 'Required parameter url missing!'});
+  }
+});
+
 
 /**
   GET /p

@@ -6,12 +6,12 @@ var React = require('react');
 
 var SearchResults = React.createClass({
   handleVideoEnqueue: function(video){
-    this.props.enqueueHandler(video.id.videoId, video.snippet.title, 'youtube');
+    this.props.enqueueHandler(video.id.videoId || video.id, video.snippet.title, 'youtube');
     return false;
   },
 
   handlePlayNow: function(video){
-    this.props.playNowHandler(video.id.videoId, video.snippet.title, 'youtube');
+    this.props.playNowHandler(video.id.videoId || video.id, video.snippet.title, 'youtube');
     return false;
   },
 

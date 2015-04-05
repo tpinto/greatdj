@@ -2,6 +2,9 @@ var Api = require('../utils/Api');
 var Constants = require('../constants/AppConstants');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 
+var fbPageReg = /.*facebook.com\/(.*)\/?/,
+    urlReg = /^(https?:\/\/)([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+
 var SearchActions = {
   search: function(q, videoDef){
     AppDispatcher.handleViewAction({
@@ -12,7 +15,7 @@ var SearchActions = {
     });
 
     var id;
-    if((id = q.match(/.*facebook.com\/(.*)\/?/))) {
+    if((id = q.match(fbPageReg))) {
 
       if(id[1].indexOf('pages') === 0){
         // got more work to do
@@ -21,6 +24,10 @@ var SearchActions = {
 
       // getting videos from a facebook page
       Api.getFacebookPageVideos(id[1]);
+
+    } else if(q.match(urlReg)){
+      Api.getVideosFromUrl(q);
+
     } else {
       // good old youtube search
       Api.searchForVideos(q, videoDef);

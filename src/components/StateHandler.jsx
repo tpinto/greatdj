@@ -9,7 +9,7 @@ var React = require('react'),
 var SearchComponent = require('./SearchComponent'),
     ResultsComponent = require('./ResultsComponent'),
     FeedbackComponent = require('./FeedbackComponent'),
-    Sampler = require('./Sampler');
+    Sampler = require('react-sampler');
 
 var PlaylistStore = require('../stores/PlaylistStore'),
     SearchStore = require('../stores/SearchStore');
@@ -17,6 +17,30 @@ var PlaylistStore = require('../stores/PlaylistStore'),
 var PlaylistActions = require('../actions/PlaylistActions'),
     SearchActions = require('../actions/SearchActions');
 
+var samples = [{
+  file: '/static/audio/horn.mp3',
+  key: 'h', // horn
+  startAt: 0.2 //seconds, obvs
+},{
+  file: '/static/audio/orch5.wav',
+  key: 'o', // orchestra hit
+  startAt: 0.05
+},{
+  file: '/static/audio/rimshot.mp3',
+  key: 's' // rimshot
+},{
+  file: '/static/audio/cowbell.mp3',
+  key: 'c' // cowbell
+},{
+  file: '/static/audio/gun.mp3',
+  key: 'g' // gun shot
+},{
+  file: '/static/audio/reload.wav',
+  key: 'r' // reload!
+},{
+  file: '/static/audio/machinegun.mp3',
+  key: 'm' // machine gun
+}];
 
 var StateHandler = React.createClass({
   getInitialState: function(){
@@ -170,19 +194,21 @@ var StateHandler = React.createClass({
             mode={this.state.mode} />
         </div>
         <a id="github-link" href="https://github.com/ruiramos/greatdj" target="_blank" className="desktop">GreatDJ on GitHub</a>
-        <a id="feedback-link" href="#feedback" className="desktop hide" onClick={this.showFeedbackForm}>Send feedback!</a>
+        <Sampler samples={samples} />
+      </div>
+    )
+  }
+});
+
+ /**
+         <a id="feedback-link" href="#feedback" className="desktop hide" onClick={this.showFeedbackForm}>Send feedback!</a>
         <FeedbackComponent
           show={this.state.showFeedbackForm}
           handleDispose={this.hideFeedbackForm}
         />
-        <Sampler />
-      </div>
-    )
-  }
+  **/
 
-});
-
-React.renderComponent(
+React.render(
   <StateHandler />,
   document.body
 );

@@ -1,9 +1,8 @@
 var Dispatcher = require('./Dispatcher');
 var Constants = require('../constants/AppConstants');
+var objectAssign = require('object-assign');
 
-var copyProperties = require('react/lib/copyProperties');
-
-var AppDispatcher = copyProperties(new Dispatcher(), {
+var AppDispatcher = objectAssign(new Dispatcher(), {
 
   /**
    * A bridge function between the views and the dispatcher, marking the action
