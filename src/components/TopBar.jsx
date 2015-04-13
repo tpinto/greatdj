@@ -156,6 +156,12 @@ var TopBar = React.createClass({
         <input type="checkbox" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} /><label htmlFor="hd-checkbox"> HD Only </label>
 
         <div className="toolbox">
+          <OverlayTrigger placement="bottom" overlay={<Tooltip>When the playlist end... restart!</Tooltip>}>
+            <button className={this.props.repeatAll ? 'sync active' : 'sync'} type="button" onClick={this.props.toggleRepeatAll}>
+              Repeat All
+            </button>
+          </OverlayTrigger>
+
           <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
             <button className={this.props.sync ? 'sync active' : 'sync'} type="button" onClick={this.props.toggleSync}>
               Party Mode

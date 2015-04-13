@@ -56,7 +56,16 @@ var ResultsComponent = React.createClass({
       this.setState({videoId: pl[pos].videoId, type: 'youtube'});
       this.props.setPosition(pos);
     } else {
-      this.setState({playing: false});
+      if (this.props.repeatAll) {
+        if (pl.length==1) { // One video in playlist
+          window.dispatchEvent(new CustomEvent('restartVideo'));
+        } else {
+          this.setState({videoId: pl[0].videoId, type: 'youtube'});
+          this.props.setPosition(0);
+        }
+      } else {
+        this.setState({playing: false});
+      }
     }
   },
 
