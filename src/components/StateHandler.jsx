@@ -53,7 +53,8 @@ var StateHandler = React.createClass({
       sync: false,
       currentQuery: SearchStore.getCurrentQuery(),
       showFeedbackForm: false,
-      hdOnly: false
+      hdOnly: false,
+      repeatAll: false
     }
   },
 
@@ -97,6 +98,12 @@ var StateHandler = React.createClass({
     if(location.hash){
       window.dispatchEvent(new CustomEvent('hashchange'));
     }
+  },
+
+  toggleRepeatAll: function(){
+    var repeatAll = !this.state.repeatAll;
+    this.setState({repeatAll: repeatAll});
+    console.log('repeatAll is now '+repeatAll);
   },
 
   toggleSync: function(){
@@ -176,6 +183,8 @@ var StateHandler = React.createClass({
             handleSavePlaylist={this.handleSavePlaylist}
             mode={this.state.mode}
             playlistId={this.state.playlistId}
+            toggleRepeatAll={this.toggleRepeatAll}
+            repeatAll={this.state.repeatAll}
             toggleSync={this.toggleSync}
             sync={this.state.sync}
             recentTerms={this.state.recentTerms}
@@ -190,6 +199,7 @@ var StateHandler = React.createClass({
             setPlaylist={this.setPlaylist}
             position={this.state.position}
             setPosition={this.setPosition}
+            repeatAll={this.state.repeatAll}
             onPlayerReady={this.playerReady}
             mode={this.state.mode} />
         </div>
