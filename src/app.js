@@ -30,5 +30,10 @@ ga('send', 'pageview');
 
 window.DATA = JSON.parse(atob(window.RAW));
 
+// application wide initizalizations
+window.app = {
+	baseTitle: document.title
+};
+
 // Start App
 require('./components/StateHandler');
