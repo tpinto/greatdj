@@ -64,6 +64,7 @@ var SearchResults = React.createClass({
       );
     } else {
       return (
+        // popular searches vs popular playlists (includes...)
         <div className="results-container results-intro">
           <div className="intro">
             <h1>Create, save and share Youtube playlists, the easy way!</h1>
@@ -88,7 +89,6 @@ var SearchResults = React.createClass({
 
             <h3>Some recent searches to get you started...</h3>
             <ul> { recentSearches } </ul>
-
           </div>
         </div>
       );

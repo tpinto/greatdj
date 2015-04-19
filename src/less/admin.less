@@ -1,0 +1,28 @@
+
+#admin {
+  .top-bar {
+    .topBar();
+  }
+  .container {
+    margin-top: @searchbar-height;
+    padding:10px;
+
+    table {
+      width: 75%;
+
+      th {
+        background: @gray-lightest;
+        border-bottom:2px solid @gray-borders;
+      }
+
+      td {
+        height: 30px;
+        border-bottom:1px solid @gray-borders;
+
+        button.delete {
+          i { color: red; }
+        }
+      }
+    }
+  }
+}

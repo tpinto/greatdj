@@ -4,18 +4,21 @@
 
 var React = require('react'),
     Player = require('./Player'),
-    Playlist = require('./Playlist');
+    Playlist = require('./Playlist'),
+    PLAY_MODES = require('../constants/AppConstants').playModes;
 
-var ResultsComponent = React.createClass({
+var PlayerComponent = React.createClass({
   getInitialState: function() {
     return {
       playing: false,
-      playlistToggled: true
+      playlistToggled: true,
     };
   },
 
   componentDidMount: function(){
     var that = this;
+
+    this.played = [];
 
     window.addEventListener('enqueue', function(e){
       var playlist = that.props.playlist;
@@ -42,6 +45,8 @@ var ResultsComponent = React.createClass({
     }
   },
 
+  // --- handlers
+
   handlePlaylistAdd: function(newPlaylist){
     var pos = this.props.position;
     if(pos < newPlaylist.length && !this.state.playing){
@@ -50,27 +55,23 @@ var ResultsComponent = React.createClass({
   },
 
   handleVideoEnded: function(){
-    var pos = this.props.position + 1,
+    var pos = this.getNextSong();
         pl = this.props.playlist;
-    if(pos < pl.length){
-      this.setState({videoId: pl[pos].videoId, type: 'youtube'});
-      this.props.setPosition(pos);
-    } else {
-      if (this.props.repeatAll) {
-        if (pl.length==1) { // One video in playlist
-          window.dispatchEvent(new CustomEvent('restartVideo'));
-        } else {
-          this.setState({videoId: pl[0].videoId, type: 'youtube'});
-          this.props.setPosition(0);
-        }
-      } else {
-        this.setState({playing: false});
-      }
-    }
-  },
 
-  playVideoByPos: function(pos){
-    this.setState({videoId: this.props.playlist[pos].videoId, type: 'youtube', playing: true});
+    if(pos > -1){
+      // next video go!
+      if(pos != this.props.position){
+        this.setState({videoId: pl[pos].videoId, type: 'youtube'});
+        this.props.setPosition(pos);
+        this.played.push(pl[pos].videoId);
+      } else {
+        // shitty edge case of restarting a video
+        window.dispatchEvent(new CustomEvent('restartVideo'));
+      }
+    } else {
+      // no video, stop
+      this.setState({playing: false});
+    }
   },
 
   handlePlayNow: function(pos, video){
@@ -94,14 +95,91 @@ var ResultsComponent = React.createClass({
     // remove the element from the playlist
     pl.splice(pos, 1);
 
+    if(this.played.indexOf(video.videoId) > -1){
+      var playedIndex = this.played.indexOf(video.videoId);
+      this.played.splice(playedIndex, 1);
+    }
+
     this.props.setPlaylist(pl);
     this.props.setPosition(currPos);
+  },
+
+  handleRepeatClick: function(){
+    if(this.props.repeatMode === PLAY_MODES.repeat.all){
+      this.props.setRepeatMode(PLAY_MODES.repeat.off);
+    } else {
+      this.props.setRepeatMode(PLAY_MODES.repeat.all);
+    }
+  },
+
+  handleShuffleClick: function(){
+    var newShuffle = !this.props.shuffleActive;
+    this.props.setShuffleActive(newShuffle);
+  },
+
+  // ----
+
+  getNextSong: function(){
+    console.log('get next song', this.props.shuffleActive, this.played, this.props.playlist);
+
+    if(this.props.shuffleActive){
+      if(this.played.length === this.props.playlist.length){
+        // already played all videos on current playlist
+        if(this.props.repeatMode === PLAY_MODES.repeat.all){
+          // restart
+          this.played = [];
+        } else {
+          // stop
+          return -1;
+        }
+      }
+
+      var pos, videoId;
+      do {
+        pos = Math.floor(Math.random() * this.props.playlist.length);
+        videoId = this.props.playlist[pos].videoId;
+      } while(this.played.indexOf(videoId) > -1);
+
+      console.log('gonna return', pos, this.played);
+
+      return pos;
+
+    } else {
+      var nextPos = this.props.position + 1;
+      if(nextPos < this.props.playlist.length){
+        // go to next video
+        return nextPos;
+
+      } else if(this.props.repeatMode === PLAY_MODES.repeat.all){
+        // go to first video
+        return 0;
+
+      } else {
+        // stop
+        return -1;
+
+      }
+    }
+
+    if (this.props.repeatAll) {
+      if (pl.length==1) { // One video in playlist
+        window.dispatchEvent(new CustomEvent('restartVideo'));
+      } else {
+        this.setState({videoId: pl[0].videoId, type: 'youtube'});
+        this.props.setPosition(0);
+      }
+    }
+
   },
 
   toggleFullPlaylist: function(){
     if(this.refs.playlistToggle.getDOMNode().classList.contains('disabled')) return;
     var p = !this.state.playlistToggled;
     this.setState({playlistToggled: p});
+  },
+
+  playVideoByPos: function(pos){
+    this.setState({videoId: this.props.playlist[pos].videoId, type: 'youtube', playing: true});
   },
 
   // ------
@@ -141,7 +219,7 @@ var ResultsComponent = React.createClass({
   noop: function(){},
 
   render: function() {
-    var btnClassName = 'playlist-toggle flat ' + (!this.props.playlist.length ? 'hide' : (!this.props.position ? 'disabled' : ''));
+    var btnToggleClassName = 'playlist-toggle flat ' + (!this.props.position ? 'disabled' : '');
     var icoClassName = this.state.playlistToggled ? 'fa fa-chevron-down' : 'fa fa-chevron-up';
     return (
       <div>
@@ -150,12 +228,25 @@ var ResultsComponent = React.createClass({
           videoId={this.state.videoId}
           position={this.props.position}
           type={this.state.type}
-          playing={this.noop} stopped={this.noop}
+          playing={this.noop}
+          stopped={this.noop}
           ended={this.handleVideoEnded}
           switchPlaylistItems={this.props.switchPlaylistItems}
-          playerReady={this.props.onPlayerReady}/>
+          playerReady={this.props.onPlayerReady} />
 
-        <button className={btnClassName} ref="playlistToggle" onClick={this.toggleFullPlaylist} ><i className={icoClassName}></i></button>
+        <div className={"playlist-toolbar" + (!this.props.playlist.length ? " _hide" : "")}>
+          <div className="btn-group">
+            <button className={this.props.shuffleActive ? 'active' : ''} onClick={this.handleShuffleClick}>
+              <i className="fa fa-random"></i>
+            </button>
+
+            <button className={this.props.repeatMode === PLAY_MODES.repeat.all ? 'active' : ''} onClick={this.handleRepeatClick}>
+              <i className="fa fa-repeat"></i>
+            </button>
+          </div>
+
+          <button className={btnToggleClassName} ref="playlistToggle" onClick={this.toggleFullPlaylist} ><i className={icoClassName}></i></button>
+        </div>
 
         <Playlist
           playlist={this.props.playlist}
@@ -171,4 +262,4 @@ var ResultsComponent = React.createClass({
 });
 
 
-module.exports = ResultsComponent;
+module.exports = PlayerComponent;

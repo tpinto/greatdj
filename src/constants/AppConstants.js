@@ -20,5 +20,13 @@ module.exports = {
   actionSource: {
     VIEW: 'view',
     SOURCE: 'source'
+  },
+  playModes: {
+    repeat: {
+      'off': 'repeat_off',
+      'one': 'repeat_one',
+      'all': 'repeat_all',
+    },
+    shuffle: 'shuffle',
   }
 };

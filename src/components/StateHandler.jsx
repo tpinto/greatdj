@@ -7,8 +7,8 @@ var React = require('react'),
     isMobile = require('ismobilejs');
 
 var SearchComponent = require('./SearchComponent'),
-    ResultsComponent = require('./ResultsComponent'),
-    FeedbackComponent = require('./FeedbackComponent'),
+    PlayerComponent = require('./PlayerComponent'),
+    FeedbackComponent = require('./FeedbackComponent'), // @todo ?
     Sampler = require('react-sampler');
 
 var PlaylistStore = require('../stores/PlaylistStore'),
@@ -16,6 +16,8 @@ var PlaylistStore = require('../stores/PlaylistStore'),
 
 var PlaylistActions = require('../actions/PlaylistActions'),
     SearchActions = require('../actions/SearchActions');
+
+var PLAY_MODES = require('../constants/AppConstants').playModes;
 
 var samples = [{
   file: '/static/audio/horn.mp3',
@@ -54,7 +56,8 @@ var StateHandler = React.createClass({
       currentQuery: SearchStore.getCurrentQuery(),
       showFeedbackForm: false,
       hdOnly: false,
-      repeatAll: false
+      repeatMode: PLAY_MODES.repeat.off,
+      shuffleActive: false
     }
   },
 
@@ -100,10 +103,14 @@ var StateHandler = React.createClass({
     }
   },
 
-  toggleRepeatAll: function(){
-    var repeatAll = !this.state.repeatAll;
-    this.setState({repeatAll: repeatAll});
-    console.log('repeatAll is now '+repeatAll);
+  setShuffleActive: function(shuffle){
+    this.setState({shuffleActive: shuffle});
+    console.log('shuffle is now ' + shuffle);
+  },
+
+  setRepeatMode: function(repeatMode){
+    this.setState({repeatMode: repeatMode});
+    console.log('repeatmode is now ' + repeatMode);
   },
 
   toggleSync: function(){
@@ -183,23 +190,24 @@ var StateHandler = React.createClass({
             handleSavePlaylist={this.handleSavePlaylist}
             mode={this.state.mode}
             playlistId={this.state.playlistId}
-            toggleRepeatAll={this.toggleRepeatAll}
-            repeatAll={this.state.repeatAll}
             toggleSync={this.toggleSync}
             sync={this.state.sync}
             recentTerms={this.state.recentTerms}
             currentQuery={this.state.currentQuery}
             changeQuery={this.changeQuery}
             setHdOnly={this.setHdOnly}
-            />
+          />
         </div>
         <div id="player-component">
-          <ResultsComponent
+          <PlayerComponent
             playlist={this.state.playlist}
             setPlaylist={this.setPlaylist}
+            setShuffleActive={this.setShuffleActive}
+            shuffleActive={this.state.shuffleActive}
+            setRepeatMode={this.setRepeatMode}
+            repeatMode={this.state.repeatMode}
             position={this.state.position}
             setPosition={this.setPosition}
-            repeatAll={this.state.repeatAll}
             onPlayerReady={this.playerReady}
             mode={this.state.mode} />
         </div>

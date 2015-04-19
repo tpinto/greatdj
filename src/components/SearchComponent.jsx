@@ -6,7 +6,7 @@ var React = require('react');
 var request = require('superagent');
 
 var SearchResults = require('./SearchResults');
-var ResultsComponent = require('./ResultsComponent');
+var PlayerComponent = require('./PlayerComponent');
 var TopBar = require('./TopBar');
 
 var API_KEY = 'AIzaSyDLwX06yG_73ImDEubOb5Yv0E_U1iIdTJs';
@@ -42,8 +42,6 @@ var SearchComponent = React.createClass({
           handleSavePlaylist={this.props.handleSavePlaylist}
           playlistId={this.props.playlistId}
           unsetPlaylistId={this.props.unsetPlaylistId}
-          toggleRepeatAll={this.props.toggleRepeatAll}
-          repeatAll={this.props.repeatAll}
           toggleSync={this.props.toggleSync}
           sync={this.props.sync}
           currentQuery={this.props.currentQuery}

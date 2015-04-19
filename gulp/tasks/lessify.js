@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 gulp.task('lessify', function () {
   bundleLogger.start();
 
-  gulp.src('./src/less/**/*.less')
+  gulp.src('./src/less/styles.less')
     .pipe(sourcemaps.init())
     .pipe(less())
     .on('error', handleErrors)

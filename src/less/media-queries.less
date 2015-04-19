@@ -1,0 +1,99 @@
+@media all and (max-width: 1175px) and (min-width : 900px) {
+  #search-component form input[type="text"] { width:35%; }
+}
+
+@media all
+    and (min-width : 900px){
+
+  .mobile { display: none  !important; }
+
+}
+
+// tablet
+@media all
+    and (max-width : 900px){
+
+.desktop { display: none  !important; }
+
+#search-component {
+  width: 100%;
+
+  div.results-container {
+    margin-top: 80px;
+
+    button {
+      min-width: 110px;
+      padding:5px;
+    }
+  }
+
+  form .autocomplete {
+    width: 70%;
+  }
+}
+#player-component { width: 100%; }
+
+.autocomplete {width: 60%;}
+
+}
+
+// mobile
+@media all
+    and (max-width : 400px){
+  #search-component {
+    div.results-container {
+      button {
+        min-width: 65px;
+        padding:5px;
+      }
+      .intro h1 {
+        margin:4em 0 0em;
+      }
+    }
+  }
+}
+// Animations
+/* Chrome, Safari, Opera */
+@-webkit-keyframes saved {
+  0% {
+    opacity:0;
+    transform: rotate(45deg);
+  }
+  40% {
+    opacity:1;
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Standard syntax */
+@keyframes saved {
+  0% {
+    opacity:0;
+    transform: rotate(45deg);
+  }
+  50% {
+    opacity:1;
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.fade-enter {
+  opacity:0.01;
+  transition: opacity .5s ease-out;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+}
+
+.fade-leave {
+  transition: opacity .5s ease-in;
+}
+
+.fade-leave.fade-leave-active {
+  opacity:0;
+}
