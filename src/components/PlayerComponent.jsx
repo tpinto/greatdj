@@ -58,7 +58,7 @@ var PlayerComponent = React.createClass({
     var pos = this.props.position,
         pl = this.props.playlist;
 
-    document.title = window.app.baseTitle+' \u266B '+pl[pos].title;
+    document.title =  pl[pos].title + ' \u266B ' + window.app.baseTitle;
   },
 
   handleVideoEnded: function(){
