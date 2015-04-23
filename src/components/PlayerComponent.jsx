@@ -54,6 +54,13 @@ var PlayerComponent = React.createClass({
     }
   },
 
+  handleVideoPlaying: function(){
+    var pos = this.props.position,
+        pl = this.props.playlist;
+
+    document.title = window.app.baseTitle+' \u266B '+pl[pos].title;
+  },
+
   handleVideoEnded: function(){
     var pos = this.getNextSong();
         pl = this.props.playlist;
@@ -71,6 +78,7 @@ var PlayerComponent = React.createClass({
     } else {
       // no video, stop
       this.setState({playing: false});
+      document.title = window.app.baseTitle;
     }
   },
 
@@ -228,7 +236,7 @@ var PlayerComponent = React.createClass({
           videoId={this.state.videoId}
           position={this.props.position}
           type={this.state.type}
-          playing={this.noop}
+          playing={this.handleVideoPlaying}
           stopped={this.noop}
           ended={this.handleVideoEnded}
           switchPlaylistItems={this.props.switchPlaylistItems}
