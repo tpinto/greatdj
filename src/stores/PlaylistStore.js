@@ -4,6 +4,7 @@ var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/AppConstants');
 var CHANGE_EVENT = Constants.CHANGE_EVENT;
 var objectAssign = require('object-assign');
+var log = require('bows')('PlaylistStore');
 
 var _playlist = [];
 var _playlistId = null;
@@ -60,7 +61,7 @@ AppDispatcher.register(function(payload) {
         saved(action.response.playlistId);
 
         if(action.response.callback){
-          console.log('calling callback with ', action.response.playlistId)
+          log('calling callback with ', action.response.playlistId)
           action.response.callback(action.response.playlistId);
         }
 
@@ -72,14 +73,14 @@ AppDispatcher.register(function(payload) {
       if(action.response === Constants.request.PENDING){
         /// tururur
       } else if(action.response.playlistId){
-        console.log('playlist loaded', action.response);
+        log('playlist loaded', action.response);
         loaded(action.response.playlist, action.response.playlistId, action.response.position);
         PlaylistStore.emitChange();
       }
       break;
 
     case Constants.PLAYLIST_CHANGE:
-      console.log('playlist change', action.response);
+      log('playlist change', action.response);
       loaded(action.response.playlist, action.response.playlistId, action.response.position);
       PlaylistStore.emitChange();
       break;

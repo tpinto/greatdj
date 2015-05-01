@@ -4,7 +4,8 @@
 
 var React = require('react'),
     urllite = require('urllite'),
-    isMobile = require('ismobilejs');
+    isMobile = require('ismobilejs'),
+    log = require('bows')('StateHandler');
 
 var SearchComponent = require('./SearchComponent'),
     PlayerComponent = require('./PlayerComponent'),
@@ -58,7 +59,7 @@ var StateHandler = React.createClass({
       hdOnly: false,
       repeatMode: PLAY_MODES.repeat.off,
       shuffleActive: false
-    }
+    };
   },
 
   componentWillMount: function(){
@@ -72,11 +73,15 @@ var StateHandler = React.createClass({
     // if you're accessing via a mobile device and there are parties for your IP
     // you'll be automatically added to the parteh
     if(window.DATA.playlists && window.DATA.playlists.length){
-      id = window.DATA.playlists[0];
-      history.pushState(null, null, '/'+id);
+      if(isMobile.any){
+        id = window.DATA.playlists[0];
+        history.pushState(null, null, '/'+id);
+        this.setState({sync: true});
+        PlaylistActions.sync(id);
 
-      this.setState({sync: true});
-      PlaylistActions.sync(id);
+      } else {
+        log('playlist in this network detected:', window.DATA.playlists[0]);
+      }
 
     } else if(url.pathname.length > 1){
       // direct link to a playlist
@@ -93,7 +98,7 @@ var StateHandler = React.createClass({
       } else {
         SearchActions.resetResults();
       }
-    }
+    };
 
   },
 
@@ -105,12 +110,12 @@ var StateHandler = React.createClass({
 
   setShuffleActive: function(shuffle){
     this.setState({shuffleActive: shuffle});
-    console.log('shuffle is now ' + shuffle);
+    log('shuffle is now ' + shuffle);
   },
 
   setRepeatMode: function(repeatMode){
     this.setState({repeatMode: repeatMode});
-    console.log('repeatmode is now ' + repeatMode);
+    log('repeatmode is now ' + repeatMode);
   },
 
   toggleSync: function(){
@@ -129,11 +134,13 @@ var StateHandler = React.createClass({
     this.setState({sync: sync});
   },
 
-  setPlaylist: function(pl){ console.log('set playlist', pl)
+  setPlaylist: function(pl){
+    log('set playlist', pl);
     PlaylistActions.changedPlaylist(this.state.playlistId, pl, this.state.position);
   },
 
-  setPosition: function(p){ console.log('set position', p)
+  setPosition: function(p){
+    log('set position', p);
     PlaylistActions.changedPlaylist(this.state.playlistId, this.state.playlist, p);
   },
 
@@ -195,8 +202,7 @@ var StateHandler = React.createClass({
             recentTerms={this.state.recentTerms}
             currentQuery={this.state.currentQuery}
             changeQuery={this.changeQuery}
-            setHdOnly={this.setHdOnly}
-          />
+            setHdOnly={this.setHdOnly} />
         </div>
         <div id="player-component">
           <PlayerComponent

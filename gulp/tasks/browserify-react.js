@@ -17,11 +17,9 @@ var reactify     = require('reactify');
 gulp.task('browserify-react', function() {
 
   var fn = (global.isWatching) ? watchify : function(fn){ return fn; };
-  console.log(global.isWatching)
-  console.log(reactify);
 
   var bundler = fn(browserify({
-    transform: ['reactify'],
+    transform: ['babelify'],
     entries: ['./src/app.js'],
     extensions: ['.js', '.jsx'],
     debug: true,

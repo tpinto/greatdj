@@ -167,6 +167,14 @@ app.get('/s', function(req, res){
 });
 
 /**
+  GET /popular_playlists
+  Gets all the recently saved searches.
+**/
+app.get('/popular_playlists', function(req, res){
+  res.send({playlists: popularPlaylists});
+});
+
+/**
   GET /admin
   Admin stuff.
 **/
