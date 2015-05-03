@@ -3,6 +3,7 @@ var request = require('superagent');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var Constants = require('../constants/AppConstants');
 var io = require('socket.io-client');
+var log = require('bows')('Api');
 
 // Youtube API Key
 var API_KEY = 'AIzaSyDLwX06yG_73ImDEubOb5Yv0E_U1iIdTJs';
@@ -29,7 +30,8 @@ var Api = {
       .send(params)
       .end(function(err, response){
         if(!err && response.body.id){
-          dispatch(key, {playlistId: response.body.id, callback: fn}, params);
+          dispatch(key, {playlistId: response.body.id}, params);
+          fn(response.body.id);
         } else {
           dispatch(key, Constants.request.ERROR, params);
         }
@@ -117,24 +119,45 @@ var Api = {
 };
 
 Api.io = {
-  socket: null,
+  socket: undefined,
+  playlistVersion: undefined,
+
   register: function(id){
     if(!this.socket){
       this.socket = io(socketIoUrl);
 
       this.socket.on('playlistChange', function(data){
-        console.log('received playlist changed', data)
-        dispatch(Constants.PLAYLIST_LOADED, {playlist: data.playlist, playlistId: data.id, position: data.position}, {id: data.id});
+        log('* Received playlist changed', data);
+
+        // timestamp of the playlist we received
+        // we will include it in future changedPlaylist requessts so the server
+        // knows if the client is based on the latest available version
+        Api.io.playlistVersion = data.ts;
+
+        dispatch(Constants.PLAYLIST_LOADED, {
+          playlist: data.playlist,
+          playlistId: data.id,
+          position: data.position,
+        }, {id: data.id});
+      });
+
+      this.socket.on('disconnect', function(){
+        // server disconnected? turning party mode off
+        dispatch(Constants.SYNC_OFF);
       });
     }
 
     this.socket.emit('register', {id: id});
+  },
 
-  },
   changedPlaylist: function(id, pl, pos){
-    if(this.socket)
-      this.socket.emit('changedPlaylist', {id: id, playlist: pl, position: pos});
+    if(this.socket){
+      this.socket.emit('changedPlaylist', {id: id, playlist: pl, position: pos, ts: this.playlistVersion});
+    } else {
+      console.warn('Tried to send a changedPlaylist but socket not available');
+    }
   },
+
   unregister: function(){
     if(this.socket){
       this.socket.off('playlistChange');
@@ -144,5 +167,5 @@ Api.io = {
   }
 };
 
-
  module.exports = Api;
+

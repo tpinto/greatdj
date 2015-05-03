@@ -41,15 +41,23 @@ var PlaylistActions = {
 
   sync: function(plId){
     console.log('sync', plId);
+    AppDispatcher.handleViewAction({
+      actionType: Constants.SYNC_ON
+    });
+
     Api.io.register(plId);
   },
 
   unsync: function(){
     console.log('unsync');
     Api.io.unregister();
+
+    AppDispatcher.handleViewAction({
+      actionType: Constants.SYNC_OFF
+    });
   },
 
-  changedPlaylist: function(plId, pl, pos){
+  changedPlaylist: function(plId, pl, pos, sync){
     AppDispatcher.handleViewAction({
       actionType: Constants.PLAYLIST_CHANGE,
       response:{
@@ -59,8 +67,8 @@ var PlaylistActions = {
       }
     });
 
-    if(plId){
-      console.log('sending changedPlaylist', plId, pl, pos)
+    if(sync){
+      console.log('sending changedPlaylist', plId, pl, pos);
       Api.io.changedPlaylist(plId, pl, pos);
     }
   },
@@ -71,6 +79,13 @@ var PlaylistActions = {
     });
 
     PlaylistActions.unsync();
+  },
+
+  setPlaylistId: function(id){
+    AppDispatcher.handleViewAction({
+      actionType: Constants.SET_PLAYLIST_ID,
+      response: {id: id}
+    });
   }
 
 };

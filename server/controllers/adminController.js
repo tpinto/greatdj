@@ -1,13 +1,17 @@
 
 var credentials = require('../auth.json');
 
+// Parties model
+var Parties = require('../models/party');
+
 /**
   Controller for serving the Admin section
 
 **/
 
-var AdminController = function(ActiveIps){
+var AdminController = function(db){
   var api = {};
+  Parties.setup(db);
 
   api.index = function(req, res){
     var user = auth(req);
@@ -17,7 +21,7 @@ var AdminController = function(ActiveIps){
       res.setHeader('WWW-Authenticate', 'Basic realm="Authorization Required"');
       res.end('Unauthorized');
     } else {
-      ActiveIps.getAll(function(result){
+      Parties.getAll(function(result){
         result.map(function(party){
           party.numClients = activeIpsController.getClientsByIp[party.ip];
           return party;

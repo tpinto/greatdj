@@ -1,35 +1,35 @@
 
-var BaseModel = function(db, model){
-  var api = {};
+var BaseModel = {
+  init: function(db, model){
+    this.db = db;
+    this.model = model;
+  },
 
-  api.getAll = function(callback){
-    db.collection(model).find().toArray(callback);
-  };
+  getAll: function(callback){
+    this.db.collection(this.model).find().toArray(callback);
+  },
 
-  api.find = function(query, callback){
-    db.collection(model).find(query).toArray(callback);
-  };
+  find: function(query, callback){
+    this.db.collection(this.model).find(query).toArray(callback);
+  },
 
-  api.insert = function(obj, callback, opts){
+  insert: function(obj, callback, opts){
     opts = opts || {w: 1};
-    db.collection(model).insert(obj, opts, callback);
-  };
+    this.db.collection(this.model).insert(obj, opts, callback);
+  },
 
-  api.update = function(query, update, callback, opts){
+  update: function(query, update, callback, opts){
     opts = opts || {w: 1};
-    db.collection(model).insert(query, update, opts, callback);
-  };
+    this.db.collection(this.model).update(query, update, opts, callback);
+  },
 
-  api.updateOrInsert = function(query, update, callback){
-    db.collection(model).insert(query, update, {w:1, upsert: true}, callback);
-  };
+  updateOrInsert: function(query, update, callback){
+    this.db.collection(this.model).update(query, update, {w:1, upsert: true}, callback);
+  },
 
-  api.delete = function(obj, callback){
-    db.collection(model).remove(obj, callback);
-  };
-
-  return api;
-
+  delete: function(obj, callback){
+    this.db.collection(this.model).remove(obj, callback);
+  },
 };
 
 module.exports = BaseModel;

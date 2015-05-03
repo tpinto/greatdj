@@ -3,7 +3,7 @@ var geoip = require('geoip-lite');
 var utils = require('../utils');
 
 // Playlist model
-var playlist = require('../models/playlist');
+var Playlist = require('../models/playlist');
 
 /**
   Controller that saves and loads playlists
@@ -12,7 +12,7 @@ var playlist = require('../models/playlist');
 
 var PlaylistController = function(db){
   var api = {};
-  var Playlist = playlist(db);
+  Playlist.setup(db);
 
   // API to be used in Router calls
   api.savePlaylist = function(req, res){
@@ -20,17 +20,30 @@ var PlaylistController = function(db){
 
     if(req.body.id){
       // update - just overwrite for now
-      Playlist.update(req.body.id, req.body, res.send.bind(res));
+      Playlist.update({id: req.body.id}, {$set:{playlist: req.body.playlist}}, function(err, result){
+        console.log('update ok ', req.body.id);
+        res.send(result);
+      });
     } else {
       // insert new record
       var data = req.body;
       data.ip = ip;
-      Playlist.createNewPlaylist(data, res.send.bind(res));
+      Playlist.createNewPlaylist(data, function(err, result){
+        var id = result.ops[0].id;
+        console.log('insert ok ', id);
+        res.send({operation: 'insert', id: id});
+      });
     }
   };
 
   api.getPlaylistById = function(req, res){
-    Playlist.getPlaylistById(req.query.id, res.send.bind(res));
+
+    // @todo ping redis with req.query.id
+
+
+    Playlist.getPlaylistById(req.query.id, function(err, result){
+      res.send(result);
+    });
   };
 
   api.getPopularPlaylists = function(req, res){

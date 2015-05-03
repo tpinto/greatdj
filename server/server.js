@@ -6,7 +6,9 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
-var router = require('./router');
+var router = require('./router'),
+    socketServer = require('./socketServer');
+
 var db;
 
 app.set('port', process.env.PORT || 8080);
@@ -32,6 +34,10 @@ mongo.connect("mongodb://localhost/greatdj", function(err, database) {
 
   // includes the routes
   router(app, io);
+
+  // fires up socket.io
+  socketServer(io, database);
+
 
   http.listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));

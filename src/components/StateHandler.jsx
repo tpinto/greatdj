@@ -53,7 +53,7 @@ var StateHandler = React.createClass({
       recentTerms: SearchStore.getRecentTerms(),
       position: PlaylistStore.getPosition(),
       playlistId: PlaylistStore.getPlaylistId(),
-      sync: false,
+      sync: PlaylistStore.getSync(),
       currentQuery: SearchStore.getCurrentQuery(),
       showFeedbackForm: false,
       hdOnly: false,
@@ -75,15 +75,16 @@ var StateHandler = React.createClass({
     if(window.DATA.playlists && window.DATA.playlists.length){
       if(isMobile.any){
         id = window.DATA.playlists[0];
-        history.pushState(null, null, '/'+id);
-        this.setState({sync: true});
+        PlaylistActions.setPlaylistId(id);
         PlaylistActions.sync(id);
 
       } else {
         log('playlist in this network detected:', window.DATA.playlists[0]);
       }
 
-    } else if(url.pathname.length > 1){
+    }
+
+    if(url.pathname.length > 1 && !isMobile.any){
       // direct link to a playlist
       // do a server request with url.hash
       id = url.pathname.slice(1);
@@ -110,12 +111,10 @@ var StateHandler = React.createClass({
 
   setShuffleActive: function(shuffle){
     this.setState({shuffleActive: shuffle});
-    log('shuffle is now ' + shuffle);
   },
 
   setRepeatMode: function(repeatMode){
     this.setState({repeatMode: repeatMode});
-    log('repeatmode is now ' + repeatMode);
   },
 
   toggleSync: function(){
@@ -130,18 +129,16 @@ var StateHandler = React.createClass({
     } else {
       PlaylistActions.unsync();
     }
-
-    this.setState({sync: sync});
   },
 
   setPlaylist: function(pl){
     log('set playlist', pl);
-    PlaylistActions.changedPlaylist(this.state.playlistId, pl, this.state.position);
+    PlaylistActions.changedPlaylist(this.state.playlistId, pl, this.state.position, this.state.sync);
   },
 
   setPosition: function(p){
     log('set position', p);
-    PlaylistActions.changedPlaylist(this.state.playlistId, this.state.playlist, p);
+    PlaylistActions.changedPlaylist(this.state.playlistId, this.state.playlist, p, this.state.sync);
   },
 
   playerReady: function(){
@@ -158,11 +155,12 @@ var StateHandler = React.createClass({
       playlist: PlaylistStore.getPlaylist(),
       playlistId: PlaylistStore.getPlaylistId(),
       position: PlaylistStore.getPosition(),
-      sync: (PlaylistStore.getPlaylistId() ? this.state.sync : false),
+      sync: PlaylistStore.getSync(),
       results: SearchStore.getVideos(),
       currentQuery: SearchStore.getCurrentQuery(),
       recentTerms: SearchStore.getRecentTerms(),
     });
+
   },
 
   handleSavePlaylist: function(fn){

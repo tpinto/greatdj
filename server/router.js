@@ -4,18 +4,17 @@ var Router = function(app, io){
 
 var db = app.get('db');
 
-var RecentSearches = require('./models/recentSearches')(),
-    Parties = require('./models/party')(db),
+var RecentSearches = require('./models/recentSearches'),
+    Parties = require('./models/party'),
 
     recentSearchesController = require('./controllers/recentSearchesController')(db),
     playlistController = require('./controllers/playlistController')(db),
     parsersController = require('./controllers/parsersController')(),
-    adminController = require('./controllers/adminController')(Parties),
+    adminController = require('./controllers/adminController')(db),
 
-    utils = require('./utils'),
+    utils = require('./utils');
 
-    socketServer = require('./socketServer');
-
+    Parties.setup(db);
 
   /**
     POST /p
@@ -80,9 +79,6 @@ var RecentSearches = require('./models/recentSearches')(),
       res.render('index', {data: utils.passVar({playlists: ids, recent: RecentSearches.getAll()})});
     });
   });
-
-  // fires up socket.io
-  socketServer(io, Parties);
 
 };
 

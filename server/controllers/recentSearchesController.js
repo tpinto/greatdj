@@ -1,5 +1,5 @@
 
-var RecentSearches = require('../models/recentSearches')();
+var RecentSearches = require('../models/recentSearches');
 
 /**
   Controller that saves and returns the current searches

@@ -7,18 +7,23 @@ var objectAssign = require('object-assign');
 var log = require('bows')('PlaylistStore');
 
 var _playlist = [];
-var _playlistId = null;
+var _playlistId;
 var _position = -1;
+var _sync = false;
 
 function saved(plId){
   _playlistId = plId;
   history.pushState(null, null, '/'+plId);
 }
 
-function loaded(pl, plId, pos){
-  _playlist = pl;
-  _playlistId = plId;
-  _position = (pos === undefined ? _position : pos); // zero is a valid value!
+function loaded(data){
+  _playlist = data.playlist;
+  _playlistId = data.playlistId;
+  _position = (data.position === undefined ? _position : data.position); // zero is a valid value!
+}
+
+function setSyncTo(sync){
+  _sync = sync;
 }
 
 var PlaylistStore = objectAssign(EventEmitter.prototype, {
@@ -35,6 +40,9 @@ var PlaylistStore = objectAssign(EventEmitter.prototype, {
     return _position;
   },
 
+  getSync: function(){
+    return _sync;
+  },
   emitChange: function(){
     this.emit(CHANGE_EVENT);
   },
@@ -60,10 +68,10 @@ AppDispatcher.register(function(payload) {
       } else if(action.response.playlistId){
         saved(action.response.playlistId);
 
-        if(action.response.callback){
-          log('calling callback with ', action.response.playlistId)
-          action.response.callback(action.response.playlistId);
-        }
+        // if(action.response.callback){
+        //   log('calling callback with ', action.response.playlistId);
+        //   action.response.callback(action.response.playlistId);
+        // }
 
         PlaylistStore.emitChange();
       }
@@ -71,23 +79,42 @@ AppDispatcher.register(function(payload) {
 
     case Constants.PLAYLIST_LOADED:
       if(action.response === Constants.request.PENDING){
-        /// tururur
+        /// tururur wait for iit
+
       } else if(action.response.playlistId){
-        log('playlist loaded', action.response);
-        loaded(action.response.playlist, action.response.playlistId, action.response.position);
+        log('Playlist loaded', action.response);
+        loaded(action.response);
         PlaylistStore.emitChange();
       }
       break;
 
+    case Constants.SYNC_OFF:
+      log('turning off sync');
+      setSyncTo(false);
+      PlaylistStore.emitChange();
+      break;
+
+    case Constants.SYNC_ON:
+      log('turning sync on');
+      setSyncTo(true);
+      PlaylistStore.emitChange();
+      break;
+
     case Constants.PLAYLIST_CHANGE:
       log('playlist change', action.response);
-      loaded(action.response.playlist, action.response.playlistId, action.response.position);
+      loaded(action.response);
       PlaylistStore.emitChange();
       break;
 
     case Constants.UNSET_PLAYLIST_ID:
-      _playlistId = null;
+      _playlistId = undefined;
       history.pushState(null, null, '/');
+      PlaylistStore.emitChange();
+      break;
+
+    case Constants.SET_PLAYLIST_ID:
+      _playlistId = action.response.id;
+        history.pushState(null, null, '/'+action.response.id);
       PlaylistStore.emitChange();
       break;
 
