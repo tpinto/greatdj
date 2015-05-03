@@ -87,8 +87,6 @@ var socketServer = function(io, db){
     socket.on('changedPlaylist', function(data){
       console.log(' * changedPlaylist:', data.id);
 
-      console.log(latestVersion[data.id], latestVersion[data.id] && latestVersion[data.id].ts, data.ts);
-
       if(!latestVersion[data.id] ||
         (latestVersion[data.id] && latestVersion[data.id].ts === data.ts)){
 

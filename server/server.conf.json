@@ -1,0 +1,10 @@
+module.exports = {
+  "prod": {
+    "HTTP_PORT": 8090,
+    "MONGODB_URL": "mongodb://localhost/greatdj"
+  },
+  "staging": {
+    "HTTP_PORT": 8190,
+    "MONGODB_URL": "mongodb://localhost/greatdj_staging"
+  }
+}

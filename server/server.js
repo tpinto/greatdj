@@ -6,12 +6,14 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
+var config = require('./server.conf.json')[process.env.ENV || 'prod'];
+
 var router = require('./router'),
     socketServer = require('./socketServer');
 
 var db;
 
-app.set('port', process.env.PORT || 8080);
+app.set('port', config.HTTP_PORT);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,7 +26,7 @@ app.engine('html', require('hbs').__express);
 
 
 // db - Mongo Connect
-mongo.connect("mongodb://localhost/greatdj", function(err, database) {
+mongo.connect(config.MONGODB_URL, function(err, database) {
   if(err){
     console.log('* Error: database connection failed. Check if mongo is running?');
     return;
