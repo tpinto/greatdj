@@ -131,14 +131,18 @@ var StateHandler = React.createClass({
     }
   },
 
-  setPlaylist: function(pl){
-    log('set playlist', pl);
-    PlaylistActions.changedPlaylist(this.state.playlistId, pl, this.state.position, this.state.sync);
-  },
-
   setPosition: function(p){
     log('set position', p);
     PlaylistActions.changedPlaylist(this.state.playlistId, this.state.playlist, p, this.state.sync);
+  },
+
+  setPlaylistChange: function(obj){
+    log('set playlist change', obj);
+    var playlist = obj.playlist || this.state.playlist;
+    var position = obj.position || this.state.position;
+
+    PlaylistActions.changedPlaylist(this.state.playlistId, playlist, position, this.state.sync);
+
   },
 
   playerReady: function(){
@@ -205,14 +209,13 @@ var StateHandler = React.createClass({
         <div id="player-component">
           <PlayerComponent
             playlist={this.state.playlist}
-            setPlaylist={this.setPlaylist}
             setShuffleActive={this.setShuffleActive}
             shuffleActive={this.state.shuffleActive}
             setRepeatMode={this.setRepeatMode}
             repeatMode={this.state.repeatMode}
             position={this.state.position}
-            setPosition={this.setPosition}
             onPlayerReady={this.playerReady}
+            setPlaylistChange={this.setPlaylistChange}
             mode={this.state.mode} />
         </div>
         <a id="github-link" href="https://github.com/ruiramos/greatdj" target="_blank" className="desktop">GreatDJ on GitHub</a>

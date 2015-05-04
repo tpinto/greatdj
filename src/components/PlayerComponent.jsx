@@ -23,7 +23,7 @@ var PlayerComponent = React.createClass({
     window.addEventListener('enqueue', function(e){
       var playlist = that.props.playlist;
       playlist.push(e.detail);
-      that.props.setPlaylist(playlist);
+      that.props.setPlaylistChange({playlist: playlist});
       that.handlePlaylistAdd(playlist);
     }, false);
 
@@ -32,9 +32,12 @@ var PlayerComponent = React.createClass({
           currPos = that.props.position;
 
       playlist.splice(currPos + 1, 0, e.detail);
-      that.props.setPlaylist(playlist);
 
-      that.props.setPosition(currPos + 1);
+      that.props.setPlaylistChange({
+        playlist: playlist,
+        position: currPos + 1
+      });
+
       that.playVideoByPos(currPos + 1);
     }, false);
   },
@@ -108,8 +111,10 @@ var PlayerComponent = React.createClass({
       this.played.splice(playedIndex, 1);
     }
 
-    this.props.setPlaylist(pl);
-    this.props.setPosition(currPos);
+    this.props.setPlaylistChange({
+      playlist: pl,
+      position: currPos
+    });
   },
 
   handleRepeatClick: function(){
@@ -219,8 +224,10 @@ var PlayerComponent = React.createClass({
       newPos++;
     }
 
-    this.props.setPosition(newPos);
-    this.props.setPlaylist(pl);
+    this.props.setPlaylistChange({
+      playlist: pl,
+      position: newPos
+    });
 
   },
 
