@@ -62,6 +62,12 @@ var RecentSearches = require('./models/recentSearches'),
   **/
   app.get('/popular', playlistController.getPopularPlaylists);
 
+  /**
+    GET /popular
+    Gets the current popular playlists.
+  **/
+  app.get('/p_summary', playlistController.getPlaylistsSummary);
+
 
   /**
     GET /admin

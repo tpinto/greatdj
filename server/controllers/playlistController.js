@@ -52,7 +52,16 @@ var PlaylistController = function(db){
 
   api.getPopularPlaylists = function(req, res){
     redisClient.zrevrange('greatdj-popular', 0, 9, function(err, replies){
-      res.send({id: req.body.id, playlistIds: replies});
+      Playlist.getPlaylistsSummary(replies, function(summary){
+        res.send({playlists: summary});
+      });
+    });
+  };
+
+  api.getPlaylistsSummary = function(req, res){
+    var ids = req.query.ids.split(',');
+    Playlist.getPlaylistsSummary(ids, function(summary){
+      res.send({data: summary});
     });
   };
 

@@ -126,7 +126,7 @@ var Api = {
     request
       .get('/popular')
       .end(function(err, response){
-        dispatch(key, {playlistIds: response.body.playlistIds});
+        dispatch(key, {playlists: response.body.playlists});
       });
   }
 };

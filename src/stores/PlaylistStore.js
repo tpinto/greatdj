@@ -129,7 +129,7 @@ AppDispatcher.register(function(payload) {
       break;
 
     case Constants.POPULAR_PLAYLISTS:
-      setPopularPlaylists(action.response.playlistIds);
+      setPopularPlaylists(action.response.playlists);
       PlaylistStore.emitChange();
       break;
 

@@ -20,9 +20,15 @@ var IntroComponent = React.createClass({
 
     var popPlaylistsArr = this.props.popularPlaylists || [];
 
-    var popularPlaylists = popPlaylistsArr.map(function(id){
+    var popularPlaylists = popPlaylistsArr.map(function(pl){
+      console.log(pl);
+      var artists = pl.artists.slice(0, 3).map(function(artist){ return artist.name; });
+
       return (
-        <li><a href={ '/' + id}>{ "http://great.dj/" + id }</a></li>
+        <li className="popular-playlist">
+          <a href={ '/' + pl.id}>{ "http://great.dj/" + pl.id }</a>
+          <p className="popular-summary">{pl.size} songs, including { artists.join(', ') }.</p>
+        </li>
       );
     })
 
@@ -67,7 +73,7 @@ var IntroComponent = React.createClass({
             </div>
             <div className="box">
               <h3>Or try one of these popular playlists!</h3>
-              <ul> {popularPlaylists} </ul>
+              <ul className="popular-playlists"> {popularPlaylists} </ul>
             </div>
           </div>
 
