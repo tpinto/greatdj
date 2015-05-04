@@ -60,6 +60,7 @@ var SearchResults = React.createClass({
         // popular searches vs popular playlists (includes...)
         <IntroComponent
           recentTerms={this.props.recentTerms}
+          popularPlaylists={this.props.popularPlaylists}
            />
       );
     }

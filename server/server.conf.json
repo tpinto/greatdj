@@ -6,5 +6,9 @@
   "staging": {
     "HTTP_PORT": 8190,
     "MONGODB_URL": "mongodb://localhost/greatdj_staging"
+  },
+  "local": {
+    "HTTP_PORT": 8080,
+    "MONGODB_URL": "mongodb://localhost/greatdj"
   }
 }

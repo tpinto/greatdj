@@ -52,7 +52,9 @@ var SearchComponent = React.createClass({
           videos={this.props.results}
           enqueueHandler={this.videoEnqueued}
           playNowHandler={this.playNowHandler}
-          recentTerms={this.props.recentTerms} />
+          recentTerms={this.props.recentTerms}
+          popularPlaylists={this.props.popularPlaylists}
+          />
       </div>
     );
   },

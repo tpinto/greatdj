@@ -10,6 +10,7 @@ var _playlist = [];
 var _playlistId;
 var _position = -1;
 var _sync = false;
+var _popular = [];
 
 function saved(plId){
   _playlistId = plId;
@@ -24,6 +25,10 @@ function loaded(data){
 
 function setSyncTo(sync){
   _sync = sync;
+}
+
+function setPopularPlaylists(pls){
+  _popular = pls;
 }
 
 var PlaylistStore = objectAssign(EventEmitter.prototype, {
@@ -43,6 +48,11 @@ var PlaylistStore = objectAssign(EventEmitter.prototype, {
   getSync: function(){
     return _sync;
   },
+
+  getPopularPlaylists: function(){
+    return _popular;
+  },
+
   emitChange: function(){
     this.emit(CHANGE_EVENT);
   },
@@ -115,6 +125,11 @@ AppDispatcher.register(function(payload) {
     case Constants.SET_PLAYLIST_ID:
       _playlistId = action.response.id;
         history.pushState(null, null, '/'+action.response.id);
+      PlaylistStore.emitChange();
+      break;
+
+    case Constants.POPULAR_PLAYLISTS:
+      setPopularPlaylists(action.response.playlistIds);
       PlaylistStore.emitChange();
       break;
 

@@ -7,13 +7,23 @@ var React = require('react');
 var IntroComponent = React.createClass({
 
   render: function() {
-    var recentSearches = this.props.recentTerms ? this.props.recentTerms.map(function(term){
+    var recentSearchesArr = this.props.recentTerms || ['radiohead', 'ag cook', 'earth wind fire'];
+
+    var recentSearches = recentSearchesArr.map(function(term){
       return (
         <li><a href={ '#' + term}>{ term }</a></li>
       );
-    }, this) : [<li><a href="#radiohead">radiohead</a></li>];
+    }, this);
 
     recentSearches.reverse();
+
+    var popPlaylistsArr = this.props.popularPlaylists || [];
+
+    var popularPlaylists = popPlaylistsArr.map(function(id){
+      return (
+        <li><a href={ '/' + id}>{ "http://great.dj/" + id }</a></li>
+      );
+    })
 
     return (
       <div className="results-container results-intro">
@@ -56,7 +66,7 @@ var IntroComponent = React.createClass({
             </div>
             <div className="box">
               <h3>Some popular playlists...</h3>
-              <ul> hey </ul>
+              <ul> {popularPlaylists} </ul>
             </div>
           </div>
 

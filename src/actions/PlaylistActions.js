@@ -86,6 +86,10 @@ var PlaylistActions = {
       actionType: Constants.SET_PLAYLIST_ID,
       response: {id: id}
     });
+  },
+
+  getPopularPlaylists: function(){
+    Api.getPopularPlaylists();
   }
 
 };

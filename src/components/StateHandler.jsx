@@ -58,7 +58,8 @@ var StateHandler = React.createClass({
       showFeedbackForm: false,
       hdOnly: false,
       repeatMode: PLAY_MODES.repeat.off,
-      shuffleActive: false
+      shuffleActive: false,
+      popularPlaylists: PlaylistStore.getPopularPlaylists()
     };
   },
 
@@ -100,6 +101,8 @@ var StateHandler = React.createClass({
         SearchActions.resetResults();
       }
     };
+
+    PlaylistActions.getPopularPlaylists();
 
   },
 
@@ -163,6 +166,7 @@ var StateHandler = React.createClass({
       results: SearchStore.getVideos(),
       currentQuery: SearchStore.getCurrentQuery(),
       recentTerms: SearchStore.getRecentTerms(),
+      popularPlaylists: PlaylistStore.getPopularPlaylists()
     });
 
   },
@@ -204,7 +208,8 @@ var StateHandler = React.createClass({
             recentTerms={this.state.recentTerms}
             currentQuery={this.state.currentQuery}
             changeQuery={this.changeQuery}
-            setHdOnly={this.setHdOnly} />
+            setHdOnly={this.setHdOnly}
+            popularPlaylists={this.state.popularPlaylists} />
         </div>
         <div id="player-component">
           <PlayerComponent

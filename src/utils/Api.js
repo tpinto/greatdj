@@ -119,6 +119,15 @@ var Api = {
       .end(function(err, response){
         dispatch(key, {terms: response.body.terms});
       });
+  },
+
+  getPopularPlaylists: function(){
+    var key = Constants.POPULAR_PLAYLISTS;
+    request
+      .get('/popular')
+      .end(function(err, response){
+        dispatch(key, {playlistIds: response.body.playlistIds});
+      });
   }
 };
 

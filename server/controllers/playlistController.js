@@ -2,6 +2,9 @@
 var geoip = require('geoip-lite');
 var utils = require('../utils');
 
+var redis = require("redis"),
+    redisClient = redis.createClient();
+
 // Playlist model
 var Playlist = require('../models/playlist');
 
@@ -37,9 +40,8 @@ var PlaylistController = function(db){
   };
 
   api.getPlaylistById = function(req, res){
-
-    // @todo ping redis with req.query.id
-
+    // +1 for this playlists popularity!
+    redisClient.zincrby('greatdj-popular', 1, req.query.id);
 
     Playlist.getPlaylistById(req.query.id, function(err, result){
       res.send(result);
@@ -47,7 +49,9 @@ var PlaylistController = function(db){
   };
 
   api.getPopularPlaylists = function(req, res){
-    //@todo
+    redisClient.zrevrange('greatdj-popular', 0, 9, function(err, replies){
+      res.send({id: req.body.id, playlistIds: replies});
+    });
   };
 
   return api;
