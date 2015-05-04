@@ -12,6 +12,8 @@ var socketIoUrl =
   (window.location.href.indexOf('localhost') >= 0 ? '' :
     window.STAGING ? 'http://great.dj:8190' : 'http://great.dj:8090');
 
+log('socket url:', socketIoUrl, window.STAGING);
+
 function dispatch(key, response, params) {
     var payload = {actionType: key, response: response};
     if (params) {
