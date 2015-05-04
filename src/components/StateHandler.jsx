@@ -64,8 +64,26 @@ var StateHandler = React.createClass({
   },
 
   componentWillMount: function(){
+    var that = this;
+
     PlaylistStore.addChangeListener(this._onChange);
     SearchStore.addChangeListener(this._onChange);
+
+    // using hashchanges for the query searches
+    window.onhashchange = function(){
+      var q = location.hash.slice(1);
+      if(q){
+        SearchActions.search(q, that.state.hdOnly ? 'high' : 'any');
+      } else {
+        SearchActions.resetResults();
+      }
+    };
+  },
+
+  componentDidMount: function(){
+    if(location.hash){
+      window.dispatchEvent(new CustomEvent('hashchange'));
+    }
 
     var url = urllite(document.location.href),
         that = this,
@@ -85,31 +103,15 @@ var StateHandler = React.createClass({
 
     }
 
-    if(url.pathname.length > 1 && !isMobile.any){
+    if(url.pathname.length > 1 && !(id && isMobile.any)){
       // direct link to a playlist
       // do a server request with url.hash
       id = url.pathname.slice(1);
       PlaylistActions.load(id);
     }
 
-    // using hashchanges for the query searches
-    window.onhashchange = function(){
-      var q = location.hash.slice(1);
-      if(q){
-        SearchActions.search(q, that.state.hdOnly ? 'high' : 'any');
-      } else {
-        SearchActions.resetResults();
-      }
-    };
-
     PlaylistActions.getPopularPlaylists();
 
-  },
-
-  componentDidMount: function(){
-    if(location.hash){
-      window.dispatchEvent(new CustomEvent('hashchange'));
-    }
   },
 
   setShuffleActive: function(shuffle){

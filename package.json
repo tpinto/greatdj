@@ -38,6 +38,9 @@
     "watchify": "^3.1.0"
   },
   "devDependencies": {
-    "babelify": "^6.0.2"
+    "babelify": "^6.0.2",
+    "gulp-sourcemaps": "^1.1.5",
+    "gulp-uglify": "^1.2.0",
+    "vinyl-buffer": "^1.0.0"
   }
 }

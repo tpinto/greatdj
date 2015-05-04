@@ -8,7 +8,7 @@ var IntroComponent = React.createClass({
 
   render: function() {
     var recentSearchesArr = this.props.recentTerms.length ?
-      this.props.recentTerms : ['radiohead', 'ag cook', 'earth wind fire', 'beyonce', 'kero kero bonito', 'minaj'];
+      this.props.recentTerms : ['radiohead', 'ag cook', 'earth wind fire', 'beyonce', 'kero kero  bo      nito', 'minaj'];
 
     var recentSearches = recentSearchesArr.map(function(term){
       return (
