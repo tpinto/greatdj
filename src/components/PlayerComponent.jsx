@@ -53,7 +53,7 @@ var PlayerComponent = React.createClass({
   handlePlaylistAdd: function(newPlaylist){
     var pos = this.props.position;
     if(pos < newPlaylist.length && !this.state.playing){
-      this.props.setPosition(pos + 1);
+      this.props.setPlaylistChange({position: pos + 1});
     }
   },
 
@@ -72,7 +72,7 @@ var PlayerComponent = React.createClass({
       // next video go!
       if(pos != this.props.position){
         this.setState({videoId: pl[pos].videoId, type: 'youtube'});
-        this.props.setPosition(pos);
+        this.props.setPlaylistChange({position: pos});
         this.played.push(pl[pos].videoId);
       } else {
         // shitty edge case of restarting a video
@@ -87,7 +87,7 @@ var PlayerComponent = React.createClass({
 
   handlePlayNow: function(pos, video){
     if(pos !== this.props.position){
-      this.props.setPosition(pos);
+      this.props.setPlaylistChange({position: pos});
     } else {
       // clicked on the currently playing video
       window.dispatchEvent(new CustomEvent('restartVideo'));
@@ -179,7 +179,7 @@ var PlayerComponent = React.createClass({
         window.dispatchEvent(new CustomEvent('restartVideo'));
       } else {
         this.setState({videoId: pl[0].videoId, type: 'youtube'});
-        this.props.setPosition(0);
+        this.props.setPlaylistChange({position: 0});
       }
     }
 
