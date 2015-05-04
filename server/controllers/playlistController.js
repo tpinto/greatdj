@@ -29,7 +29,7 @@ var PlaylistController = function(db){
       var data = req.body;
       data.ip = ip;
       Playlist.createNewPlaylist(data, function(err, result){
-        var id = result.ops[0].id;
+        var id = result[0] ? result[0].id : result.ops[0].id; //@todo investigate
         console.log('insert ok ', id);
         res.send({operation: 'insert', id: id});
       });
