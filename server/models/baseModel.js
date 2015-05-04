@@ -15,19 +15,23 @@ var BaseModel = {
 
   insert: function(obj, callback, opts){
     opts = opts || {w: 1};
+    callback = callback || function(){};
     this.db.collection(this.model).insert(obj, opts, callback);
   },
 
   update: function(query, update, callback, opts){
     opts = opts || {w: 1};
+    callback = callback || function(){};
     this.db.collection(this.model).update(query, update, opts, callback);
   },
 
   updateOrInsert: function(query, update, callback){
+    callback = callback || function(){};
     this.db.collection(this.model).update(query, update, {w:1, upsert: true}, callback);
   },
 
   delete: function(obj, callback){
+    callback = callback || function(){};
     this.db.collection(this.model).remove(obj, callback);
   },
 };
