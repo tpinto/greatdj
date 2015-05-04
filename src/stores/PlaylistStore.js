@@ -11,6 +11,8 @@ var _playlistId;
 var _position = -1;
 var _sync = false;
 var _popular = [];
+var _partyClients = 0;
+var _ts;
 
 function saved(plId){
   _playlistId = plId;
@@ -21,6 +23,7 @@ function loaded(data){
   _playlist = data.playlist;
   _playlistId = data.playlistId;
   _position = (data.position === undefined ? _position : data.position); // zero is a valid value!
+  _ts = data.ts;
 }
 
 function setSyncTo(sync){
@@ -29,6 +32,10 @@ function setSyncTo(sync){
 
 function setPopularPlaylists(pls){
   _popular = pls;
+}
+
+function setPartyClients(c){
+  _partyClients = c;
 }
 
 var PlaylistStore = objectAssign(EventEmitter.prototype, {
@@ -52,6 +59,16 @@ var PlaylistStore = objectAssign(EventEmitter.prototype, {
   getPopularPlaylists: function(){
     return _popular;
   },
+
+  getPartyClients: function(){
+    return _partyClients;
+  },
+
+  getPlaylistTs: function(){
+    return _ts;
+  },
+
+  //
 
   emitChange: function(){
     this.emit(CHANGE_EVENT);
@@ -130,6 +147,11 @@ AppDispatcher.register(function(payload) {
 
     case Constants.POPULAR_PLAYLISTS:
       setPopularPlaylists(action.response.playlists);
+      PlaylistStore.emitChange();
+      break;
+
+    case Constants.PARTY_PRESENCE:
+      setPartyClients(action.response.clients);
       PlaylistStore.emitChange();
       break;
 

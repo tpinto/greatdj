@@ -32,13 +32,17 @@ var socketServer = function(io, db){
       if(playlistClients[data.id].length > 1 && latestVersion[data.id]){
         socket.emit('playlistChange', latestVersion[data.id]);
       } else {
-        Playlist.getPlaylistById(data.id, function(err, data){
-          socket.emit('playlistChange', data);
-        });
+        data.ts = new Date().getTime();
+        socket.emit('playlistChange', data);
+        latestVersion[plId] = data;
       }
 
-      Parties.connectClient(socket.request.connection.remoteAddress, data.id);
+       socket.join(data.id);
+
       myIp = socket.request.connection.remoteAddress;
+      Parties.connectClient(socket.request.connection.remoteAddress, data.id, function(result){
+        io.to(data.id).emit('presence', {clients: playlistClients[data.id].length})
+      });
 
     });
 
@@ -57,7 +61,13 @@ var socketServer = function(io, db){
           latestVersion[plId] = null;
         }
 
-        Parties.disconnectClient(myIp, plId);
+        var numClients = playlistClients[plId].length;
+        var playlistId = plId;
+
+        Parties.disconnectClient(myIp, plId, function(result){
+          console.log('presence on disconnect:', numClients);
+          io.to(playlistId).emit('presence', {clients: numClients})
+        });
         plId = null;
 
       }
@@ -78,7 +88,15 @@ var socketServer = function(io, db){
           latestVersion[plId] = null;
         }
 
-        Parties.disconnectClient(myIp, plId);
+        socket.leave(plId);
+
+        var numClients = playlistClients[plId].length;
+        var playlistId = plId;
+
+        Parties.disconnectClient(myIp, plId, function(result){
+          console.log('presence on disconnect:', numClients)
+          io.to(playlistId).emit('presence', {clients: numClients})
+        });
         plId = null;
 
       }
@@ -93,12 +111,7 @@ var socketServer = function(io, db){
         data.ts = new Date().getTime();
         latestVersion[data.id] = data;
 
-        for (var i = playlistClients[data.id].length - 1; i >= 0; i--) {
-          var subscriber = playlistClients[data.id][i];
-          //if(subscriber !== socket){
-            subscriber.emit('playlistChange', data);
-          //}
-        }
+        io.to(data.id).emit('playlistChange', data);
       } else {
         // client based on an old version of the pl, gonna send the actual one for now
         // would be nice to have some sort of diff here...

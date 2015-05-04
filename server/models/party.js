@@ -9,24 +9,28 @@ Party.setup = function(db){
 };
 
   // extends
-Party.connectClient = function(ip, plId){
+Party.connectClient = function(ip, plId, fn){
   Party.updateOrInsert(
-    {ip: ip},
+    {ip: ip, playlistId: plId},
     {
-      $set: {playlistId: plId},
       $inc: {clients: 1}
     },
     function(err, result){
       console.log('(m) party.js: registred ip ', ip, 'to', plId);
+      fn(result);
     }
   );
 };
 
-Party.disconnectClient = function(ip, plId){
+Party.disconnectClient = function(ip, plId, fn){
   Party.find({ip: ip, playlistId: plId}, function(err, result){
-    console.log(result[0]);
+    console.log(result);
+    if(!result || !result.length) return;
+
     if(result[0].clients === 1){
-      Party.delete({ip: ip, playlistId: plId}, function(err, result){});
+      Party.delete({ip: ip, playlistId: plId}, function(err, result){
+        if(fn){ fn(); }
+      });
       console.log('(m) party.js: delete ', {ip: ip, playlistId: plId});
     } else {
       Party.update(
@@ -34,6 +38,9 @@ Party.disconnectClient = function(ip, plId){
         {$inc: {clients: -1}},
         function(err, res){
           console.log('(m) party.js: api disconnect, clients on', plId);
+          if(fn){
+            fn(res);
+          }
         }
       );
     }

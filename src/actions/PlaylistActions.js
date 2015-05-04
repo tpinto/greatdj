@@ -20,13 +20,13 @@ var PlaylistActions = {
   /**
    * @param  {string} text
    */
-  createAndSync: function(pl) {
+  createAndSync: function(pl, pos) {
     AppDispatcher.handleViewAction({
       actionType: Constants.PLAYLIST_SAVE
     });
 
     Api.savePlaylist(pl, null, function(plId){
-      PlaylistActions.sync(plId);
+      PlaylistActions.sync(plId, pl, pos);
     });
 
   },
@@ -39,13 +39,13 @@ var PlaylistActions = {
     Api.loadPlaylist(plId, fn);
   },
 
-  sync: function(plId){
+  sync: function(plId, pl, pos){
     console.log('sync', plId);
     AppDispatcher.handleViewAction({
       actionType: Constants.SYNC_ON
     });
 
-    Api.io.register(plId);
+    Api.io.register(plId, pl, pos);
   },
 
   unsync: function(){

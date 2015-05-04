@@ -36,7 +36,6 @@ var IntroComponent = React.createClass({
     var popPlaylistsArr = this.props.popularPlaylists || [];
 
     var popularPlaylists = popPlaylistsArr.map(function(pl){
-      console.log(pl);
       var artists = pl.artists.slice(0, 3).map(function(artist){ return artist.name; });
 
       return (

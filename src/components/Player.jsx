@@ -5,6 +5,7 @@
 var React = require('react');
 var sdk = require('require-sdk')('https://www.youtube.com/iframe_api', 'YT');
 var loadTrigger = sdk.trigger();
+var log = require('bows')('Player');
 
 // YT API requires global ready event handler
 window.onYouTubeIframeAPIReady = function () {
@@ -47,9 +48,12 @@ var Player = React.createClass({
   },
 
   _loadNewUrl: function(videoId) {
+    var startAt = (new Date().getTime() - this.props.ts) > 5000 ?
+      (new Date().getTime() - this.props.ts)/1000 : 0;
+
     if(this.state.player.loadVideoById){
       this.props.autoplay
-        ? this.state.player.loadVideoById(videoId, 0, "hd720")
+        ? this.state.player.loadVideoById(videoId, startAt, "hd720")
         : this.state.player.cueVideoById(videoId);
 
       this.state.player.setPlaybackQuality("hd720");

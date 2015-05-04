@@ -1,6 +1,7 @@
 
 var geoip = require('geoip-lite');
 var utils = require('../utils');
+var _ = require('underscore');
 
 var redis = require("redis"),
     redisClient = redis.createClient();
@@ -40,6 +41,7 @@ var PlaylistController = function(db){
   };
 
   api.getPlaylistById = function(req, res){
+
     Playlist.getPlaylistById(req.query.id, function(err, result){
       // +1 for this playlists popularity!
       if(result.playlist.length){
@@ -53,7 +55,14 @@ var PlaylistController = function(db){
   api.getPopularPlaylists = function(req, res){
     redisClient.zrevrange('greatdj-popular', 0, 9, function(err, replies){
       Playlist.getPlaylistsSummary(replies, function(summary){
-        res.send({playlists: summary});
+        var orderedResponse = [];
+
+        replies.forEach(function(plId){
+          orderedResponse.push(_.findWhere(summary, {id: plId}));
+        });
+
+        res.send({playlists: orderedResponse});
+
       });
     });
   };

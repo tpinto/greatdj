@@ -45,6 +45,7 @@ var samples = [{
   key: 'm' // machine gun
 }];
 
+
 var StateHandler = React.createClass({
   getInitialState: function(){
     return {
@@ -59,7 +60,9 @@ var StateHandler = React.createClass({
       hdOnly: false,
       repeatMode: PLAY_MODES.repeat.off,
       shuffleActive: false,
-      popularPlaylists: PlaylistStore.getPopularPlaylists()
+      popularPlaylists: PlaylistStore.getPopularPlaylists(),
+      partyClients: PlaylistStore.getPartyClients(),
+      ts: PlaylistStore.getPlaylistTs()
     };
   },
 
@@ -78,6 +81,9 @@ var StateHandler = React.createClass({
         SearchActions.resetResults();
       }
     };
+
+    PlaylistActions.getPopularPlaylists();
+
   },
 
   componentDidMount: function(){
@@ -87,30 +93,24 @@ var StateHandler = React.createClass({
 
     var url = urllite(document.location.href),
         that = this,
-        id;
+        id = url.pathname.slice(1);
 
     // if you're accessing via a mobile device and there are parties for your IP
     // you'll be automatically added to the parteh
-    if(window.DATA.playlists && window.DATA.playlists.length){
+    if(window.DATA.playlists && window.DATA.playlists.length && !id){
       if(isMobile.any){
         id = window.DATA.playlists[0];
         PlaylistActions.setPlaylistId(id);
-        PlaylistActions.sync(id);
+        PlaylistActions.sync(id, this.state.playlist, this.state.position);
 
       } else {
         log('playlist in this network detected:', window.DATA.playlists[0]);
       }
 
-    }
-
-    if(url.pathname.length > 1 && !(id && isMobile.any)){
-      // direct link to a playlist
-      // do a server request with url.hash
-      id = url.pathname.slice(1);
+    } else if(id){
       PlaylistActions.load(id);
     }
 
-    PlaylistActions.getPopularPlaylists();
 
   },
 
@@ -127,9 +127,9 @@ var StateHandler = React.createClass({
 
     if(sync){
       if(!this.state.playlistId)
-        PlaylistActions.createAndSync(this.state.playlist);
+        PlaylistActions.createAndSync(this.state.playlist, this.state.position);
       else
-        PlaylistActions.sync(this.state.playlistId);
+        PlaylistActions.sync(this.state.playlistId, this.state.playlist, this.state.position);
 
     } else {
       PlaylistActions.unsync();
@@ -168,7 +168,9 @@ var StateHandler = React.createClass({
       results: SearchStore.getVideos(),
       currentQuery: SearchStore.getCurrentQuery(),
       recentTerms: SearchStore.getRecentTerms(),
-      popularPlaylists: PlaylistStore.getPopularPlaylists()
+      popularPlaylists: PlaylistStore.getPopularPlaylists(),
+      partyClients: PlaylistStore.getPartyClients(),
+      ts: PlaylistStore.getPlaylistTs()
     });
 
   },
@@ -212,7 +214,8 @@ var StateHandler = React.createClass({
             changeQuery={this.changeQuery}
             setHdOnly={this.setHdOnly}
             setPosition={this.setPosition}
-            popularPlaylists={this.state.popularPlaylists} />
+            popularPlaylists={this.state.popularPlaylists}
+            partyClients={this.state.sync && this.state.partyClients} />
         </div>
         <div id="player-component">
           <PlayerComponent
@@ -224,7 +227,8 @@ var StateHandler = React.createClass({
             position={this.state.position}
             onPlayerReady={this.playerReady}
             setPlaylistChange={this.setPlaylistChange}
-            mode={this.state.mode} />
+            mode={this.state.mode}
+            ts={this.state.ts} />
         </div>
         <a id="github-link" href="https://github.com/ruiramos/greatdj" target="_blank" className="desktop">GreatDJ on GitHub</a>
         <Sampler samples={samples} />

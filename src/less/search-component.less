@@ -4,8 +4,60 @@
   width:65%;
   background: rgba(255,255,255,0.975);
 
+  .desktop-join-pl {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height:30px;
+
+    transition: transform 250ms ease-out;
+    will-change: transform;
+
+    transform: scale(1, 0);
+    transform-origin: top center;
+
+    background: #333339;
+    color: #eaeaea;
+    text-align: center;
+    line-height: 30px;
+
+    font-size:0.9em;
+    font-weight: 500;
+
+    a {
+      color: white;
+      &:hover {
+        color: white;
+        text-decoration: none;
+      }
+    }
+
+    a.hide-message {
+      float:right;
+      text-decoration: none;
+      color: #999;
+      margin-right: 8px;
+
+      &:hover {
+        color: #bbb;
+      }
+    }
+
+    &.in {
+      transform: scale(1, 1);
+    }
+
+  }
+
+  .desktop-join-pl.in + form {
+    top: 30px;
+  }
+
   form {
     .topBar();
+    transition: top 250ms ease-out;
+    will-change: top;
 
     .tagSpan {
       font-size: 12px;

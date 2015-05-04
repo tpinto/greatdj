@@ -11,10 +11,16 @@
   height: @searchbar-height;
   width:100%;
 
+  transition: background 250ms ease-out;
+  will-change: background;
+
+  &.sync {
+    background: lighten(@pink, 7.5%);
+  }
+
   span.logo {
     display: inline-block;
     text-transform: uppercase;
-    width:15%;
     text-align:left;
     font-weight: 600;
     font-size: 1em;
@@ -23,5 +29,20 @@
       color: white;
       text-decoration: none;
     }
+  }
+
+  .label {
+    margin: 0 12px;
+    border-radius: 6px;
+    padding:3px 6px;
+    background: rgba(255,255,255,0.5);
+    font-size:0.85em;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  .logo-label-container {
+    min-width: 15%;
+    display:inline-block;
   }
 }

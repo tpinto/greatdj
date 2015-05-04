@@ -21,6 +21,7 @@ var TopBar = React.createClass({
     return {
       complete: [],
       selected: -1,
+      hideMessage: false
     };
   },
 
@@ -146,44 +147,80 @@ var TopBar = React.createClass({
     this.props.setHdOnly(hd);
   },
 
+  handleJoinParty: function(e){
+    e.preventDefault();
+    PlaylistActions.sync(window.DATA.playlists[0]);
+    this.handleHideMessage();
+  },
+
+  handleHideMessage: function(e){
+    if(e) e.preventDefault();
+    this.setState({hideMessage: true});
+    this.refs.desktopJoinPl.getDOMNode().classList.remove('in');
+  },
+
   render: function() {
+    var that = this;
+    var labelStyle = this.props.sync ? {display: 'inline-block'} : {display: 'none'};
+    var clientStr = this.props.partyClients && this.props.partyClients > 1 ? 'clients' : 'client'
+
+    var showJoinBar;
+    console.log(this.props.sync, window.DATA.playlists[0])
+    if(window.DATA.playlists[0] && !this.props.sync && !this.state.hideMessage){
+      showJoinBar = true;
+      setTimeout(function(){
+        that.refs.desktopJoinPl.getDOMNode().classList.add('in');
+      }, 2000);
+    }
+
     return (
-      <form onSubmit={this.handleSubmit}>
-        <span className="logo desktop"><a href="/" onClick={this.handleLogoClick}>GREAT DJ<span className="it">!</span></a></span>
-        <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
-        placeholder="Search for music videos here..." value={this.props.currentQuery} />
-        <input type="submit" value="Search" />
-        <input type="checkbox" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} /><label htmlFor="hd-checkbox"> HD Only </label>
+      <div className="top-bar">
+        <span className="desktop-join-pl" ref="desktopJoinPl">
+          There's a party going on on your network at great.dj/{window.DATA.playlists[0]}!&nbsp;
+          <a href="#" onClick={this.handleJoinParty}>Connect?</a>
+          <a href="#" onClick={this.handleHideMessage} className="hide-message">x</a>
+        </span>
 
-        <div className="toolbox">
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
-            <button className={this.props.sync ? 'sync active' : 'sync'} type="button" onClick={this.props.toggleSync}>
-              Party Mode
-            </button>
-          </OverlayTrigger>
+        <form onSubmit={this.handleSubmit} className={this.props.sync ? 'sync' : ''}>
+          <span className="logo-label-container">
+            <span className="logo desktop"><a href="/" onClick={this.handleLogoClick}>GREAT DJ<span className="it">!</span></a></span>
+            <span className="label" style={labelStyle}>{this.props.partyClients} {clientStr}</span>
+          </span>
+          <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
+          placeholder="Search for music videos here..." value={this.props.currentQuery} />
+          <input type="submit" value="Search" />
+          <input type="checkbox" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} /><label htmlFor="hd-checkbox"> HD Only </label>
 
-          <OverlayTrigger placement="bottom" overlay={<Tooltip>Your playlist id. Click the <strong>x</strong> to go on a new one.</Tooltip>}>
-            <span className="playlist-id" style={this.props.playlistId ? {} : {display: 'none'}}>
-              {this.props.playlistId}
-              <i className="fa fa-times" onClick={this.unsetPlaylistId}></i>
-            </span>
-          </OverlayTrigger>
+          <div className="toolbox">
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
+              <button className={this.props.sync ? 'sync active' : 'sync'} type="button" onClick={this.props.toggleSync}>
+                Party Mode
+              </button>
+            </OverlayTrigger>
 
-          <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved. Share this URL with the world!</Tooltip>}>
-            <button className="save" ref="saveButton" type="button" onClick={this.handleSavePlaylist}>
-              Save
-            </button>
-          </OverlayTrigger>
-        </div>
+            <OverlayTrigger placement="bottom" overlay={<Tooltip>Your playlist id. Click the <strong>x</strong> to go on a new one.</Tooltip>}>
+              <span className="playlist-id" style={this.props.playlistId ? {} : {display: 'none'}}>
+                {this.props.playlistId}
+                <i className="fa fa-times" onClick={this.unsetPlaylistId}></i>
+              </span>
+            </OverlayTrigger>
 
-        <AutoComplete
-          complete={this.state.complete}
-          selected={this.state.selected}
-          setQuery={this.setQuery}
-          handleMouseEnterOption={this.handleMouseEnterOption}
-          handleMouseLeaveOption={this.handleMouseLeaveOption} />
+            <OverlayTrigger ref="saveTooltip" placement="bottom" trigger="manual" overlay={<Tooltip moreClasses="save">Saved. Share this URL with the world!</Tooltip>}>
+              <button className="save" ref="saveButton" type="button" onClick={this.handleSavePlaylist}>
+                Save
+              </button>
+            </OverlayTrigger>
+          </div>
 
-      </form>
+          <AutoComplete
+            complete={this.state.complete}
+            selected={this.state.selected}
+            setQuery={this.setQuery}
+            handleMouseEnterOption={this.handleMouseEnterOption}
+            handleMouseLeaveOption={this.handleMouseLeaveOption} />
+
+        </form>
+      </div>
     );
   }
 

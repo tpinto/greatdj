@@ -243,6 +243,7 @@ var PlayerComponent = React.createClass({
           autoplay="true"
           videoId={this.state.videoId}
           position={this.props.position}
+          ts={this.props.ts}
           type={this.state.type}
           playing={this.handleVideoPlaying}
           stopped={this.noop}

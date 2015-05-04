@@ -35,7 +35,9 @@ var Api = {
       .end(function(err, response){
         if(!err && response.body.id){
           dispatch(key, {playlistId: response.body.id}, params);
-          fn(response.body.id);
+          if(fn){
+            fn(response.body.id);
+          }
         } else {
           dispatch(key, Constants.request.ERROR, params);
         }
@@ -55,7 +57,9 @@ var Api = {
         .end(function(err, response){
           if(!err && response.body.id){
             dispatch(key, {playlist: response.body.playlist, playlistId: response.body.id}, params);
-            fn();
+            if(fn) {
+              fn();
+            }
           } else {
             dispatch(key, Constants.request.ERROR, params);
           }
@@ -136,7 +140,7 @@ Api.io = {
   socket: undefined,
   playlistVersion: undefined,
 
-  register: function(id){
+  register: function(id, playlist, position){
     var that = this;
 
     if(!this.socket){
@@ -154,6 +158,7 @@ Api.io = {
           playlist: data.playlist,
           playlistId: data.id,
           position: data.position,
+          ts: data.ts
         }, {id: data.id});
       });
 
@@ -169,9 +174,15 @@ Api.io = {
           that.socket.emit('register', {id: id});
         }
       });
+
+      this.socket.on('presence', function(data){
+        dispatch(Constants.PARTY_PRESENCE, {
+          clients: data.clients
+        });
+      })
     }
 
-    this.socket.emit('register', {id: id});
+    this.socket.emit('register', {id: id, playlist: playlist, position: position});
   },
 
   changedPlaylist: function(id, pl, pos){
