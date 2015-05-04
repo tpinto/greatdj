@@ -8,7 +8,9 @@ var log = require('bows')('Api');
 // Youtube API Key
 var API_KEY = 'AIzaSyDLwX06yG_73ImDEubOb5Yv0E_U1iIdTJs';
 
-var socketIoUrl = (window.location.href.indexOf('localhost') >= 0 ? '' : 'http://great.dj:8090');
+var socketIoUrl =
+  (window.location.href.indexOf('localhost') >= 0 ? '' :
+    window.STAGING ? 'http://great.dj:8190' : 'http://great.dj:8090');
 
 function dispatch(key, response, params) {
     var payload = {actionType: key, response: response};

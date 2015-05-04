@@ -18,9 +18,12 @@ gulp.task('browserify-react', function() {
 
   var fn = (global.isWatching) ? watchify : function(fn){ return fn; };
 
+  var entries = ['./src/app.js'];
+  if(global.isStaging) entries.push('./src/staging.js');
+
   var bundler = fn(browserify({
     transform: ['babelify'],
-    entries: ['./src/app.js'],
+    entries: entries,
     extensions: ['.js', '.jsx'],
     debug: true,
     cache: {},
@@ -28,18 +31,6 @@ gulp.task('browserify-react', function() {
     fullPaths: true
   }));
 
-  // bundler.transform('reactify');
-  // bundler.extensions(['.js', '.jsx']);
-
-  // var bundler = watchify(browserify({
-  //   // Specify the entry point of your app
-  //   transform: ['reactify'],
-  //   entries: ['./src/app.js'],
-  //   // Add file extentions to make optional in your requires
-  //   extensions: ['.js', '.jsx'],
-  //   // Enable source maps!
-  //   debug: true,
-  // }), watchify.args);
 
   var bundle = function() {
     // Log when bundling starts
