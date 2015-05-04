@@ -2,3 +2,4 @@ node_modules/
 dist/
 components/fortawesome-font-awesome/build/*
 auth.json
+dump.rdb

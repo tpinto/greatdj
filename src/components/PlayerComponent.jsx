@@ -65,7 +65,7 @@ var PlayerComponent = React.createClass({
   },
 
   handleVideoEnded: function(){
-    var pos = this.getNextSong();
+    var pos = this.getNextSong(),
         pl = this.props.playlist;
 
     if(pos > -1){
