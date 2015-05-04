@@ -6,7 +6,7 @@ var Playlist = Object.create(baseModel);
 
 
 Playlist.setup = function(db){
-    Playlist.init(db, 'playlist');
+    Playlist.init(db, 'playlists');
 };
 
 Playlist.createNewPlaylist = function(data, callback){
