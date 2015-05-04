@@ -7,7 +7,8 @@ var React = require('react');
 var IntroComponent = React.createClass({
 
   render: function() {
-    var recentSearchesArr = this.props.recentTerms || ['radiohead', 'ag cook', 'earth wind fire'];
+    var recentSearchesArr = this.props.recentTerms.length ?
+      this.props.recentTerms : ['radiohead', 'ag cook', 'earth wind fire', 'beyonce', 'kero kero bonito', 'minaj'];
 
     var recentSearches = recentSearchesArr.map(function(term){
       return (

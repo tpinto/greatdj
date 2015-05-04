@@ -40,10 +40,12 @@ var PlaylistController = function(db){
   };
 
   api.getPlaylistById = function(req, res){
-    // +1 for this playlists popularity!
-    redisClient.zincrby('greatdj-popular', 1, req.query.id);
-
     Playlist.getPlaylistById(req.query.id, function(err, result){
+      // +1 for this playlists popularity!
+      if(result.playlist.length){
+        redisClient.zincrby('greatdj-popular', 1, req.query.id);
+      }
+
       res.send(result);
     });
   };
