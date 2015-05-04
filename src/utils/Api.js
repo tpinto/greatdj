@@ -127,6 +127,8 @@ Api.io = {
   playlistVersion: undefined,
 
   register: function(id){
+    var that = this;
+
     if(!this.socket){
       this.socket = io(socketIoUrl);
 
@@ -136,7 +138,7 @@ Api.io = {
         // timestamp of the playlist we received
         // we will include it in future changedPlaylist requessts so the server
         // knows if the client is based on the latest available version
-        Api.io.playlistVersion = data.ts;
+        that.playlistVersion = data.ts;
 
         dispatch(Constants.PLAYLIST_LOADED, {
           playlist: data.playlist,
@@ -148,6 +150,14 @@ Api.io = {
       this.socket.on('disconnect', function(){
         // server disconnected? turning party mode off
         dispatch(Constants.SYNC_OFF);
+        that.shouldReconnect = true;
+      });
+
+      this.socket.on('connect', function(){
+        // hande reconnections on mobile due to innactivity / putting the browser in background...
+        if(that.shoudReconnect){
+          that.socket.emit('register', {id: id});
+        }
       });
     }
 

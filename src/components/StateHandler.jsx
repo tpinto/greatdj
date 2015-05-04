@@ -138,8 +138,8 @@ var StateHandler = React.createClass({
 
   setPlaylistChange: function(obj){
     log('set playlist change', obj);
-    var playlist = obj.playlist || this.state.playlist;
-    var position = obj.position || this.state.position;
+    var playlist = obj.playlist === undefined ? this.state.playlist : obj.playlist;
+    var position = obj.position === undefined ? this.state.position : obj.position;
 
     PlaylistActions.changedPlaylist(this.state.playlistId, playlist, position, this.state.sync);
 
