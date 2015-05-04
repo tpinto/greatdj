@@ -66,7 +66,7 @@ var IntroComponent = React.createClass({
               <ul> { recentSearches } </ul>
             </div>
             <div className="box">
-              <h3>Some popular playlists...</h3>
+              <h3>Or try one of these popular playlists!</h3>
               <ul> {popularPlaylists} </ul>
             </div>
           </div>
