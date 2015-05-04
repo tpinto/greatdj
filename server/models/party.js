@@ -26,7 +26,7 @@ Party.disconnectClient = function(ip, plId){
   Party.find({ip: ip, playlistId: plId}, function(err, result){
     console.log(result[0]);
     if(result[0].clients === 1){
-      Party.delete({ip: ip, playlistId: plId});
+      Party.delete({ip: ip, playlistId: plId}, function(err, result){});
       console.log('(m) party.js: delete ', {ip: ip, playlistId: plId});
     } else {
       Party.update(
@@ -41,7 +41,7 @@ Party.disconnectClient = function(ip, plId){
 };
 
 Party.reset = function(){
-  Party.delete({});
+  Party.delete({}, function(err, result){});
 };
 
 
