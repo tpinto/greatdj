@@ -44,12 +44,10 @@ gulp.task('browserify-react-prod', function() {
       .pipe(source('app.js'))
 
       .pipe(buffer())
-      .pipe(sourcemaps.init({loadMaps: true}))
-          // Add transformation tasks to the pipeline here.
-          .pipe(uglify())
-          .on('error', handleErrors)
 
-      .pipe(sourcemaps.write('./'))
+      // Add transformation tasks to the pipeline here.
+      .pipe(uglify())
+      .on('error', handleErrors)
 
       // Specify the output destination
       .pipe(gulp.dest('./dist/'))
