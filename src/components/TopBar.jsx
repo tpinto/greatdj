@@ -189,7 +189,8 @@ var TopBar = React.createClass({
           <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
           placeholder="Search for music videos here..." value={this.props.currentQuery} />
           <input type="submit" value="Search" />
-          <input type="checkbox" className="desktop" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} /><label htmlFor="hd-checkbox"> HD Only </label>
+          <input type="checkbox" className="desktop" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} />
+          <label htmlFor="hd-checkbox" className="desktop"> HD Only </label>
 
           <div className="toolbox">
             <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
