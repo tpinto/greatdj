@@ -175,7 +175,7 @@ var TopBar = React.createClass({
 
     return (
       <div className="top-bar">
-        <span className="desktop-join-pl" ref="desktopJoinPl">
+        <span className="desktop-join-pl desktop" ref="desktopJoinPl">
           There's a party going on on your network at great.dj/{window.DATA.playlists[0]}!&nbsp;
           <a href="#" onClick={this.handleJoinParty}>Connect?</a>
           <a href="#" onClick={this.handleHideMessage} className="hide-message">x</a>
@@ -189,7 +189,7 @@ var TopBar = React.createClass({
           <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
           placeholder="Search for music videos here..." value={this.props.currentQuery} />
           <input type="submit" value="Search" />
-          <input type="checkbox" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} /><label htmlFor="hd-checkbox"> HD Only </label>
+          <input type="checkbox" className="desktop" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} /><label htmlFor="hd-checkbox"> HD Only </label>
 
           <div className="toolbox">
             <OverlayTrigger placement="bottom" overlay={<Tooltip>With party mode on, multiple devices can control this playlist.</Tooltip>}>
