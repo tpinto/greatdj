@@ -19,7 +19,7 @@ gulp.task('browserify-react', function() {
   var fn = (global.isWatching) ? watchify : function(fn){ return fn; };
 
   var entries = ['./src/app.js'];
-  if(global.isStaging) entries.push('./src/staging.js');
+  if(global.isStaging) entries.unshift('./src/staging.js');
 
   var bundler = fn(browserify({
     transform: ['babelify'],
