@@ -211,6 +211,7 @@ var StateHandler = React.createClass({
             currentQuery={this.state.currentQuery}
             changeQuery={this.changeQuery}
             setHdOnly={this.setHdOnly}
+            setPosition={this.setPosition}
             popularPlaylists={this.state.popularPlaylists} />
         </div>
         <div id="player-component">

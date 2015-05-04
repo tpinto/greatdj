@@ -54,6 +54,7 @@ var SearchComponent = React.createClass({
           playNowHandler={this.playNowHandler}
           recentTerms={this.props.recentTerms}
           popularPlaylists={this.props.popularPlaylists}
+          setPosition={this.props.setPosition}
           />
       </div>
     );

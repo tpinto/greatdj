@@ -61,6 +61,7 @@ var SearchResults = React.createClass({
         <IntroComponent
           recentTerms={this.props.recentTerms}
           popularPlaylists={this.props.popularPlaylists}
+          setPosition={this.props.setPosition}
            />
       );
     }

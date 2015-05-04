@@ -43,7 +43,7 @@ var Api = {
 
   },
 
-  loadPlaylist: function(plId){
+  loadPlaylist: function(plId, fn){
     var key = Constants.PLAYLIST_LOADED;
     var params = {id: plId};
 
@@ -55,6 +55,7 @@ var Api = {
         .end(function(err, response){
           if(!err && response.body.id){
             dispatch(key, {playlist: response.body.playlist, playlistId: response.body.id}, params);
+            fn();
           } else {
             dispatch(key, Constants.request.ERROR, params);
           }

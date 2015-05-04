@@ -3,12 +3,27 @@
   */
 
 var React = require('react');
+var PlaylistActions = require('../actions/PlaylistActions');
 
 var IntroComponent = React.createClass({
 
+  handlePlaylistLoad: function(e){
+    e.preventDefault();
+    var that = this;
+
+    var plId = e.target.attributes['data-id'].value;
+    that.props.setPosition(-1);
+
+    PlaylistActions.load(plId, function(){
+      that.props.setPosition(0);
+    });
+
+    history.pushState(null, null, '/'+plId);
+  },
+
   render: function() {
     var recentSearchesArr = this.props.recentTerms.length ?
-      this.props.recentTerms : ['radiohead', 'ag cook', 'earth wind fire', 'beyonce', 'kero kero  bo      nito', 'minaj'];
+      this.props.recentTerms : ['radiohead', 'ag cook', 'earth wind fire', 'beyonce', 'kero kero bonito', 'minaj'];
 
     var recentSearches = recentSearchesArr.map(function(term){
       return (
@@ -26,11 +41,11 @@ var IntroComponent = React.createClass({
 
       return (
         <li className="popular-playlist">
-          <a href={ '/' + pl.id}>{ "http://great.dj/" + pl.id }</a>
+          <a href={ '/' + pl.id} data-id={pl.id} onClick={ this.handlePlaylistLoad }>{ "http://great.dj/" + pl.id }</a>
           <p className="popular-summary">{pl.size} songs, including { artists.join(', ') }.</p>
         </li>
       );
-    })
+    }, this)
 
     return (
       <div className="results-container results-intro">

@@ -192,7 +192,8 @@ var PlayerComponent = React.createClass({
   },
 
   playVideoByPos: function(pos){
-    this.setState({videoId: this.props.playlist[pos].videoId, type: 'youtube', playing: true});
+    if(pos >= 0)
+      this.setState({videoId: this.props.playlist[pos].videoId, type: 'youtube', playing: true});
   },
 
   // ------

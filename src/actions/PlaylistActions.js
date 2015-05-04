@@ -34,9 +34,9 @@ var PlaylistActions = {
   /**
    * @param  {string} id
    */
-  load: function(plId) {
+  load: function(plId, fn) {
     console.log('load', plId);
-    Api.loadPlaylist(plId);
+    Api.loadPlaylist(plId, fn);
   },
 
   sync: function(plId){
