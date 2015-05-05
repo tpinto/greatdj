@@ -23,8 +23,14 @@ var PlayerComponent = React.createClass({
     window.addEventListener('enqueue', function(e){
       var playlist = that.props.playlist;
       playlist.push(e.detail);
-      that.props.setPlaylistChange({playlist: playlist});
-      that.handlePlaylistAdd(playlist);
+
+      var pos = that.props.position;
+      if(pos < newPlaylist.length && !that.state.playing){
+        that.props.setPlaylistChange({playlist: playlist, position: pos + 1});
+      } else {
+        that.props.setPlaylistChange({playlist: playlist});
+      }
+
     }, false);
 
     window.addEventListener('playNow', function(e){
