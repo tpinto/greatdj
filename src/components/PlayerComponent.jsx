@@ -25,7 +25,7 @@ var PlayerComponent = React.createClass({
       playlist.push(e.detail);
 
       var pos = that.props.position;
-      if(pos < newPlaylist.length && !that.state.playing){
+      if(pos < playlist.length && !that.state.playing){
         that.props.setPlaylistChange({playlist: playlist, position: pos + 1});
       } else {
         that.props.setPlaylistChange({playlist: playlist});
