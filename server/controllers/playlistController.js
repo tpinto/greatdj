@@ -2,6 +2,7 @@
 var geoip = require('geoip-lite');
 var utils = require('../utils');
 var _ = require('underscore');
+var ERRORS = require('../constants/Errors');
 
 var redis = require("redis"),
     redisClient = redis.createClient();
@@ -43,12 +44,19 @@ var PlaylistController = function(db){
   api.getPlaylistById = function(req, res){
 
     Playlist.getPlaylistById(req.query.id, function(err, result){
-      // +1 for this playlists popularity!
-      if(result.playlist.length){
-        redisClient.zincrby('greatdj-popular', 1, req.query.id);
-      }
 
-      res.send(result);
+      if(err){
+        res.send(err);
+      } else if(!result){
+        res.send(ERRORS.PLAYLIST_NOT_FOUND);
+      } else {
+        // +1 for this playlists popularity!
+        if(result.playlist.length){
+          redisClient.zincrby('greatdj-popular', 1, req.query.id);
+        }
+
+        res.send(result);
+      }
     });
   };
 

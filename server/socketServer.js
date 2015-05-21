@@ -30,9 +30,11 @@ var socketServer = function(io, db){
       plId = data.id;
 
       if(playlistClients[data.id].length > 1 && latestVersion[data.id]){
+        latestVersion[data.id].deltats = new Date().getTime() - latestVersion[data.id].ts;
         socket.emit('playlistChange', latestVersion[data.id]);
       } else {
         data.ts = new Date().getTime();
+        data.deltats = 0;
         socket.emit('playlistChange', data);
         latestVersion[plId] = data;
       }
@@ -109,6 +111,8 @@ var socketServer = function(io, db){
         (latestVersion[data.id] && latestVersion[data.id].ts === data.ts)){
 
         data.ts = new Date().getTime();
+        data.deltats = 0;
+
         latestVersion[data.id] = data;
 
         io.to(data.id).emit('playlistChange', data);
@@ -116,6 +120,8 @@ var socketServer = function(io, db){
         // client based on an old version of the pl, gonna send the actual one for now
         // would be nice to have some sort of diff here...
         console.log('* Getting client up to date with playlist', latestVersion[data.id]);
+
+        latestVersion[data.id].deltats = new Date().getTime() - latestVersion[data.id].ts;
         socket.emit('playlistChange', latestVersion[data.id]);
 
       }

@@ -48,13 +48,13 @@ var Player = React.createClass({
   },
 
   _loadNewUrl: function(videoId) {
-    var startAt = (new Date().getTime() - this.props.ts) > 5000 ?
-      (new Date().getTime() - this.props.ts)/1000 : 0;
+    var startAt = this.props.dts && this.props.dts > 2000 ?
+      this.props.dts/1000 : 0;
 
     if(this.state.player.loadVideoById){
-      this.props.autoplay
-        ? this.state.player.loadVideoById(videoId, startAt, "hd720")
-        : this.state.player.cueVideoById(videoId);
+      this.props.autoplay ?
+        this.state.player.loadVideoById(videoId, startAt, "hd720") :
+        this.state.player.cueVideoById(videoId);
 
       this.state.player.setPlaybackQuality("hd720");
       this.refs.curtain.getDOMNode().style.display = 'none';

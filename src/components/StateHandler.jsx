@@ -62,7 +62,8 @@ var StateHandler = React.createClass({
       shuffleActive: false,
       popularPlaylists: PlaylistStore.getPopularPlaylists(),
       partyClients: PlaylistStore.getPartyClients(),
-      ts: PlaylistStore.getPlaylistTs()
+      ts: PlaylistStore.getPlaylistTs(),
+      dts: PlaylistStore.getPlaylistDelta()
     };
   },
 
@@ -170,7 +171,8 @@ var StateHandler = React.createClass({
       recentTerms: SearchStore.getRecentTerms(),
       popularPlaylists: PlaylistStore.getPopularPlaylists(),
       partyClients: PlaylistStore.getPartyClients(),
-      ts: PlaylistStore.getPlaylistTs()
+      ts: PlaylistStore.getPlaylistTs(),
+      dts: PlaylistStore.getPlaylistDelta()
     });
 
   },
@@ -228,7 +230,8 @@ var StateHandler = React.createClass({
             onPlayerReady={this.playerReady}
             setPlaylistChange={this.setPlaylistChange}
             mode={this.state.mode}
-            ts={this.state.ts} />
+            ts={this.state.ts}
+            dts={this.state.dts} />
         </div>
         <a id="github-link" href="https://github.com/ruiramos/greatdj" target="_blank" className="desktop">GreatDJ on GitHub</a>
         <Sampler samples={samples} />

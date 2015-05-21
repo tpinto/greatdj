@@ -13,6 +13,7 @@ var _sync = false;
 var _popular = [];
 var _partyClients = 0;
 var _ts;
+var _dts;
 
 function saved(plId){
   _playlistId = plId;
@@ -24,6 +25,7 @@ function loaded(data){
   _playlistId = data.playlistId;
   _position = (data.position === undefined ? _position : data.position); // zero is a valid value!
   _ts = data.ts;
+  _dts = data.deltats;
 }
 
 function setSyncTo(sync){
@@ -66,6 +68,10 @@ var PlaylistStore = objectAssign(EventEmitter.prototype, {
 
   getPlaylistTs: function(){
     return _ts;
+  },
+
+  getPlaylistDelta: function(){
+    return _dts;
   },
 
   //
