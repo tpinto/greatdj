@@ -51,6 +51,9 @@ var Player = React.createClass({
     var startAt = this.props.dts && this.props.dts > 2000 ?
       this.props.dts/1000 : 0;
 
+    log(startAt, this.props.ts);
+    startAt = 0;
+
     if(this.state.player.loadVideoById){
       this.props.autoplay ?
         this.state.player.loadVideoById(videoId, startAt, "hd720") :
