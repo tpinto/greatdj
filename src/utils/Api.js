@@ -33,8 +33,11 @@ var Api = {
       .post('/p')
       .send(params)
       .end(function(err, response){
-        if(!err && response.body.id){
-          dispatch(key, {playlistId: response.body.id}, params);
+        if(!err){
+          if(response.body.id){ // new playlist just created
+            dispatch(key, {playlistId: response.body.id}, params);
+          }
+
           if(fn){
             fn(response.body.id);
           }

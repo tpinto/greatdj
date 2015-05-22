@@ -125,13 +125,13 @@ var TopBar = React.createClass({
     this.props.handleSavePlaylist(this.playlistSaved);
   },
 
-  playlistSaved: function(){
+  playlistSaved: function(id){
     var that = this;
-    this.refs.saveTooltip.show();
+    if(id) this.refs.saveTooltip.show();
     this.refs.saveButton.getDOMNode().classList.add('saved');
 
     setTimeout(function(){
-      that.refs.saveTooltip.hide();
+      if(id) that.refs.saveTooltip.hide();
       that.refs.saveButton.getDOMNode().classList.remove('saved');
     }, 4500);
   },
