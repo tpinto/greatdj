@@ -46,7 +46,7 @@ Playlist.getDescriptionForPlaylist = function(id, callback){
     var plInfo = result ? result[0] : [];
     if(!plInfo) return callback(Errors.PLAYLIST_NOT_FOUND);
 
-    var artists = plInfo.artists.slice(0, 3).map(function(artist){ return artist.name; })
+    var artists = plInfo.artists.slice(0, 4).map(function(artist){ return artist.name; })
 
     var desc = 'Great playlist with ';
     desc += plInfo.size !== 1 ? plInfo.size + ' songs ' : '1 song ';
