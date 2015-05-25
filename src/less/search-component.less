@@ -285,8 +285,49 @@
           }
 
         }
-      }
-    }
 
-  }
+
+      .entry-state {
+        display: none;
+
+        font-size: 0.8em;
+        font-weight: 500;
+        margin-top: 4px;
+
+        i {
+          margin-right: 4px;
+        }
+
+        &.playing {
+          color: @green;
+          i:before {
+            content: '\f028';
+          }
+        }
+
+        &.played {
+          color: #cfcfcf;
+          i:before {
+            content: '\f00c';
+          }
+        }
+
+        &.in-queue {
+          color: #757575;
+          i:before {
+            content: '\f063';
+          }
+        }
+      }
+
+      &.in-queue .entry-state.in-queue,
+      &.playing .entry-state.playing,
+      &.played .entry-state.played {
+        display: block;
+      }
+
+      } //tr
+    } //table
+
+  } // results-container
 }

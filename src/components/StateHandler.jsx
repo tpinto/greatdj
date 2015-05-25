@@ -199,6 +199,21 @@ var StateHandler = React.createClass({
     SearchActions.search(this.state.currentQuery, hdOnly ? 'high' : 'any');
   },
 
+  getPlaylistPosition: function(videoId){
+    for (var i = 0; i < this.state.playlist.length; i++) {
+      if(this.state.playlist[i].videoId === videoId){
+        if(i < this.state.position) {
+          return -1;
+        } else if(i === this.state.position){
+          return 0;
+        } else {
+          return 1;
+        }
+      }
+    };
+
+  },
+
   render: function(){
     return (
       <div id="app">
@@ -217,7 +232,9 @@ var StateHandler = React.createClass({
             setHdOnly={this.setHdOnly}
             setPosition={this.setPosition}
             popularPlaylists={this.state.popularPlaylists}
-            partyClients={this.state.sync && this.state.partyClients} />
+            partyClients={this.state.sync && this.state.partyClients}
+            getPlaylistPosition={this.getPlaylistPosition}
+            />
         </div>
         <div id="player-component">
           <PlayerComponent
@@ -231,7 +248,8 @@ var StateHandler = React.createClass({
             setPlaylistChange={this.setPlaylistChange}
             mode={this.state.mode}
             ts={this.state.ts}
-            dts={this.state.dts} />
+            dts={this.state.dts}
+            />
         </div>
         <a id="github-link" href="https://github.com/ruiramos/greatdj" target="_blank" className="desktop">GreatDJ on GitHub</a>
         <Sampler samples={samples} />

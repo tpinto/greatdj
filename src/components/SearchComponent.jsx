@@ -58,6 +58,7 @@ var SearchComponent = React.createClass({
           recentTerms={this.props.recentTerms}
           popularPlaylists={this.props.popularPlaylists}
           setPosition={this.props.setPosition}
+          getPlaylistPosition={this.props.getPlaylistPosition}
           />
       </div>
     );
