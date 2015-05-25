@@ -6,13 +6,15 @@ var db = app.get('db');
 
 var RecentSearches = require('./models/recentSearches'),
     Parties = require('./models/party'),
+    Playlists = require('./models/playlist'),
 
     recentSearchesController = require('./controllers/recentSearchesController')(db),
     playlistController = require('./controllers/playlistController')(db),
     parsersController = require('./controllers/parsersController')(),
     adminController = require('./controllers/adminController')(db),
 
-    utils = require('./utils');
+    utils = require('./utils')
+    AppConstants = require('./constants/App');
 
     Parties.setup(db);
 
@@ -75,14 +77,38 @@ var RecentSearches = require('./models/recentSearches'),
   **/
   app.get('/admin', adminController.index);
 
+  app.param('plId', function(req, res, next, id){
+    req.playlist = {
+      plId: id
+    };
+
+    Playlists.getDescriptionForPlaylist(req.params.plId, function(err, result){
+      if(err){
+        delete req.playlist;
+      } else {
+        req.playlist.description = result;
+      }
+
+      next();
+    })
+  });
+
   /**
     GET *
     Everything else - serves index.html.
   **/
-  app.get('*', function(req, res){
+  app.get('/(:plId?)', function(req, res){
+
+    var pageDescription =  req.playlist ?
+      req.playlist.description :
+      AppConstants.pageDescription;
+
     Parties.find({ip: utils.getRemoteIpAddress(req)}, function(err, result){
       var ids = result.map(function(obj){ return obj.playlistId; });
-      res.render('index', {data: utils.passVar({playlists: ids, recent: RecentSearches.getAll()})});
+      res.render('index', {
+        data: utils.passVar({playlists: ids, recent: RecentSearches.getAll()}),
+        description: pageDescription
+      });
     });
   });
 

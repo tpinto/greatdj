@@ -47,7 +47,9 @@ var SearchComponent = React.createClass({
           currentQuery={this.props.currentQuery}
           changeQuery={this.props.changeQuery}
           setHdOnly={this.props.setHdOnly}
-          partyClients={this.props.partyClients} />
+          partyClients={this.props.partyClients}
+          setPosition={this.props.setPosition}
+          />
 
         <SearchResults
           videos={this.props.results}

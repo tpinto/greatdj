@@ -30,16 +30,31 @@ var socketServer = function(io, db){
       plId = data.id;
 
       if(playlistClients[data.id].length > 1 && latestVersion[data.id]){
+        // there are clients and a current playlist version, return those
         latestVersion[data.id].deltats = new Date().getTime() - latestVersion[data.id].ts;
         socket.emit('playlistChange', latestVersion[data.id]);
+
       } else {
+        // client is creating the party
         data.ts = new Date().getTime();
         data.deltats = 0;
-        socket.emit('playlistChange', data);
-        latestVersion[plId] = data;
+
+        // if data.playlist doesnt exists he is joining a party that ended in the meantime.
+        // get the playlist from the server before returning the data
+        if(!data.playlist){
+          Playlist.getPlaylistById(data.id, function(err, result){
+            data.playlist = result.playlist || [];
+            data.position = 0;
+            socket.emit('playlistChange', data);
+            latestVersion[plId] = data;
+          })
+        } else {
+          socket.emit('playlistChange', data);
+          latestVersion[plId] = data;
+        }
       }
 
-       socket.join(data.id);
+      socket.join(data.id);
 
       myIp = socket.request.connection.remoteAddress;
       Parties.connectClient(socket.request.connection.remoteAddress, data.id, function(result){

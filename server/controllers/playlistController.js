@@ -47,7 +47,7 @@ var PlaylistController = function(db){
 
       if(err){
         res.send(err);
-      } else if(!result){
+      } else if(!result || !result.playlist){
         res.send(ERRORS.PLAYLIST_NOT_FOUND);
       } else {
         // +1 for this playlists popularity!
@@ -70,7 +70,6 @@ var PlaylistController = function(db){
         });
 
         res.send({playlists: orderedResponse});
-
       });
     });
   };

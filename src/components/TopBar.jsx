@@ -149,7 +149,12 @@ var TopBar = React.createClass({
 
   handleJoinParty: function(e){
     e.preventDefault();
-    PlaylistActions.sync(window.DATA.playlists[0]);
+    var plId = window.DATA.playlists[0];
+
+    this.props.setPosition(-1);
+    PlaylistActions.sync(plId);
+    history.pushState(null, null, '/'+plId);
+
     this.handleHideMessage();
   },
 
@@ -170,7 +175,7 @@ var TopBar = React.createClass({
       showJoinBar = true;
       setTimeout(function(){
         that.refs.desktopJoinPl.getDOMNode().classList.add('in');
-      }, 2000);
+      }, 3000);
     }
 
     return (

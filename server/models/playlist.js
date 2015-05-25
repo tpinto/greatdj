@@ -2,6 +2,7 @@
 var geoip = require('geoip-lite');
 var baseModel = require('./baseModel');
 var _ = require('underscore');
+var Errors = require('../constants/Errors');
 
 var Playlist = Object.create(baseModel);
 
@@ -39,6 +40,25 @@ Playlist.getPlaylistsSummary = function(ids, callback){
 
     });
 };
+
+Playlist.getDescriptionForPlaylist = function(id, callback){
+  Playlist.getPlaylistsSummary([id], function(result){
+    var plInfo = result ? result[0] : [];
+    if(!plInfo) return callback(Errors.PLAYLIST_NOT_FOUND);
+
+    var artists = plInfo.artists.slice(0, 3).map(function(artist){ return artist.name; })
+
+    var desc = 'Great playlist with ';
+    desc += plInfo.size !== 1 ? plInfo.size + ' songs ' : '1 song ';
+    desc += 'from artists like ';
+    desc += artists.reduce(function(memo, current, i){
+      return memo + current + ((i === artists.length - 2) ? ' and ' : ', ')
+    }, '').slice(0, -2);
+    desc += '!';
+
+    callback(null, desc);
+  })
+}
 
 function getPlaylistArtists(playlist){
   var artists = [];
