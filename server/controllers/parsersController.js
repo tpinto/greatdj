@@ -29,13 +29,13 @@ var Parsers = function(){
     request
       .get(url)
       .end(function(err, response){
-        var videos = response.text.match(/youtube.com\/embed\/(.*)\?/g);
+        var videos = response.text.match(/youtube\.com\/embed\/(.*)\?/g);
 
         // no video found on the page;
         if(!videos) return callback(err, {items: []});
 
         var ids = videos.map(function(vid){
-            return vid.match(/youtube.com\/embed\/(.*)\?/)[1];
+            return vid.match(/youtube\.com\/embed\/(.*)\?/)[1];
           }).join(',');
 
         // gets info about a list of videos

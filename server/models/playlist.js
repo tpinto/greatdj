@@ -48,13 +48,21 @@ Playlist.getDescriptionForPlaylist = function(id, callback){
 
     var artists = plInfo.artists.slice(0, 4).map(function(artist){ return artist.name; })
 
-    var desc = 'Great playlist with ';
-    desc += plInfo.size !== 1 ? plInfo.size + ' songs ' : '1 song ';
-    desc += 'from artists like ';
-    desc += artists.reduce(function(memo, current, i){
+    var desc = artists.reduce(function(memo, current, i){
       return memo + current + ((i === artists.length - 2) ? ' and ' : ', ')
     }, '').slice(0, -2);
+    desc += artists.length > 3 ? ' and others' : '';
+    desc += ' in this Great DJ! playlist with '
+    desc += plInfo.size !== 1 ? plInfo.size + ' tracks' : '1 track';
     desc += '!';
+
+    // var desc = 'Great playlist with ';
+    // desc += plInfo.size !== 1 ? plInfo.size + ' songs ' : '1 song ';
+    // desc += 'from artists like ';
+    // desc += artists.reduce(function(memo, current, i){
+    //   return memo + current + ((i === artists.length - 2) ? ' and ' : ', ')
+    // }, '').slice(0, -2);
+    // desc += '!';
 
     callback(null, desc);
   })
@@ -92,6 +100,8 @@ function getPlaylistArtists(playlist){
   var sortedArtists = artists.sort(function(a, b){
     return a.count < b.count;
   });
+
+  //console.log(JSON.strinfigy(sortedArtists))
 
   return sortedArtists;
 
