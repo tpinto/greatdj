@@ -1,5 +1,6 @@
 
 var request = require('superagent');
+var _ = require('underscore');
 
 var youTubeListApi = 'https://www.googleapis.com/youtube/v3/videos';
 var youtubeApiKey = 'AIzaSyBOUg2rsWYmnU627izv30PK60ctKzw9h9k';
@@ -29,14 +30,17 @@ var Parsers = function(){
     request
       .get(url)
       .end(function(err, response){
-        var videos = response.text.match(/youtube\.com\/embed\/(.*)\?/g);
+        var videos = response.text.match(/youtube\.com\/(embed\/(.*)\?|watch\?v=(\w+))/g);
 
         // no video found on the page;
         if(!videos) return callback(err, {items: []});
 
-        var ids = videos.map(function(vid){
-            return vid.match(/youtube\.com\/embed\/(.*)\?/)[1];
-          }).join(',');
+        var ids = _.uniq(videos.map(function(vid){
+            var m = vid.match(/youtube\.com\/(embed\/(.*)\?|watch\?v=(\w+))/);
+            return m[2] || m[3];
+          })).join(',');
+
+        console.log(videos, ids)
 
         // gets info about a list of videos
         request.get(youTubeListApi)
