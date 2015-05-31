@@ -30,13 +30,13 @@ var Parsers = function(){
     request
       .get(url)
       .end(function(err, response){
-        var videos = response.text.match(/youtube\.com\/(embed\/(.*)\?|watch\?v=(\w+))/g);
+        var videos = response.text.match(/youtube\.com\/(embed\/(\w+)|watch\?v=(\w+))/g);
 
         // no video found on the page;
         if(!videos) return callback(err, {items: []});
 
         var ids = _.uniq(videos.map(function(vid){
-            var m = vid.match(/youtube\.com\/(embed\/(.*)\?|watch\?v=(\w+))/);
+            var m = vid.match(/youtube\.com\/(embed\/(\w+)|watch\?v=(\w+))/);
             return m[2] || m[3];
           })).join(',');
 
