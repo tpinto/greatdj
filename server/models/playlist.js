@@ -34,14 +34,17 @@ Playlist.getPlaylistsSummary = function(ids, callback){
         return {
           id: pl.id,
           size: pl.playlist.length,
-          artists: getPlaylistArtists(pl.playlist)
+          artists: getPlaylistArtists(pl.playlist),
+          videos: pl.playlist
         }
       }));
 
     });
 };
 
-Playlist.getDescriptionForPlaylist = function(id, callback){
+Playlist.getPlaylistDetails = function(id, callback){
+  var result = {};
+
   Playlist.getPlaylistsSummary([id], function(result){
     var plInfo = result ? result[0] : [];
     if(!plInfo) return callback(Errors.PLAYLIST_NOT_FOUND);
@@ -64,7 +67,10 @@ Playlist.getDescriptionForPlaylist = function(id, callback){
     // }, '').slice(0, -2);
     // desc += '!';
 
-    callback(null, desc);
+    result.description = desc;
+    result.videos = plInfo.videos;
+
+    callback(null, result);
   })
 }
 

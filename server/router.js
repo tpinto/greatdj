@@ -82,11 +82,11 @@ var RecentSearches = require('./models/recentSearches'),
       plId: id
     };
 
-    Playlists.getDescriptionForPlaylist(req.params.plId, function(err, result){
+    Playlists.getPlaylistDetails(req.params.plId, function(err, result){
       if(err){
         delete req.playlist;
       } else {
-        req.playlist.description = result;
+        req.playlist = result;
       }
 
       next();
@@ -105,9 +105,13 @@ var RecentSearches = require('./models/recentSearches'),
 
     Parties.find({ip: utils.getRemoteIpAddress(req)}, function(err, result){
       var ids = result.map(function(obj){ return obj.playlistId; });
+
+      var randomVideo = req.playlist.videos[Math.floor(Math.random() * req.playlist.videos.length)];
+
       res.render('index', {
         data: utils.passVar({playlists: ids, recent: RecentSearches.getAll()}),
-        description: pageDescription
+        description: pageDescription,
+        image_large_url: 'img.youtube.com/vi/' + randomVideo.videoId + '/0.jpg'
       });
     });
   });
