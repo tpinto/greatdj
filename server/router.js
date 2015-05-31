@@ -106,13 +106,17 @@ var RecentSearches = require('./models/recentSearches'),
     Parties.find({ip: utils.getRemoteIpAddress(req)}, function(err, result){
       var ids = result.map(function(obj){ return obj.playlistId; });
 
-      var randomVideo = req.playlist.videos[Math.floor(Math.random() * req.playlist.videos.length)];
-
-      res.render('index', {
+      var data = {
         data: utils.passVar({playlists: ids, recent: RecentSearches.getAll()}),
         description: pageDescription,
-        image_large_url: 'img.youtube.com/vi/' + randomVideo.videoId + '/0.jpg'
-      });
+      }
+
+      if(req.playlist){
+        var randomVideo = req.playlist.videos[Math.floor(Math.random() * req.playlist.videos.length)];
+        data.image_large_url = 'img.youtube.com/vi/' + randomVideo.videoId + '/0.jpg'
+      }
+
+      res.render('index', data);
     });
   });
 
