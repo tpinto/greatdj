@@ -32,7 +32,7 @@ window.DATA = JSON.parse(atob(window.RAW));
 
 // application wide initizalizations
 window.app = {
-	baseTitle: document.title
+	baseTitle: 'GREAT DJ!'
 };
 
 // Start App

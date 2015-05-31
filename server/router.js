@@ -109,11 +109,13 @@ var RecentSearches = require('./models/recentSearches'),
       var data = {
         data: utils.passVar({playlists: ids, recent: RecentSearches.getAll()}),
         description: pageDescription,
-      }
+        title: 'GREAT DJ!'
+      };
 
       if(req.playlist){
         var randomVideo = req.playlist.videos[Math.floor(Math.random() * req.playlist.videos.length)];
         data.image_large_url = 'img.youtube.com/vi/' + randomVideo.videoId + '/maxresdefault.jpg'
+        data.title += ' Playlist ' + req.playlist.plId;
       }
 
       res.render('index', data);
