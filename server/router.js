@@ -115,7 +115,7 @@ var RecentSearches = require('./models/recentSearches'),
       if(req.playlist){
         var randomVideo = req.playlist.videos[Math.floor(Math.random() * req.playlist.videos.length)];
         data.image_large_url = 'img.youtube.com/vi/' + randomVideo.videoId + '/maxresdefault.jpg'
-        data.title += ' Playlist ' + req.playlist.plId;
+        data.title += ' Playlist: ' + req.playlist.plId;
       }
 
       res.render('index', data);
