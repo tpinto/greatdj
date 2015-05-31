@@ -1,5 +1,15 @@
 
-var recentSearches = [];
+var recentSearches = [
+  'boy george do you really want to hurt me',
+  'Herbie Hancock',
+  'bbc radio 1',
+  'greg wilson',
+  'ag cook',
+  'nicki minaj',
+  'fall out boy',
+  'beyonce',
+  'client liaison',
+  'Retiree'];
 
 var RecentSearches = {
   insert: function(term){
