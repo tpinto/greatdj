@@ -49,7 +49,7 @@ Playlist.getDescriptionForPlaylist = function(id, callback){
     var artists = plInfo.artists.slice(0, 4).map(function(artist){ return artist.name; })
 
     var desc = artists.reduce(function(memo, current, i){
-      return memo + current + ((i === artists.length - 2) ? ' and ' : ', ')
+      return memo + current + ', ';
     }, '').slice(0, -2);
     desc += artists.length > 3 ? ' and others' : '';
     desc += ' in this Great DJ! playlist with '

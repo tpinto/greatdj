@@ -76,6 +76,7 @@ var StateHandler = React.createClass({
     // using hashchanges for the query searches
     window.onhashchange = function(){
       var q = location.hash.slice(1);
+      console.log('query is', q)
       if(q){
         SearchActions.search(q, that.state.hdOnly ? 'high' : 'any');
       } else {

@@ -40,8 +40,6 @@ var Parsers = function(){
             return m[2] || m[3];
           })).join(',');
 
-        console.log(videos, ids)
-
         // gets info about a list of videos
         request.get(youTubeListApi)
           .accept('json')
@@ -50,7 +48,7 @@ var Parsers = function(){
             id: ids,
             key: youtubeApiKey
           }).end(function(e, response){
-            result.items = response.body.items;
+            result.items = response.body.items || [];
             callback(e, result);
           });
       });

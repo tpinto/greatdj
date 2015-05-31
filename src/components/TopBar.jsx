@@ -8,7 +8,6 @@ var AutoComplete = require('./AutoComplete');
 var Tooltip = require('./Tooltip');
 var OverlayTrigger = require('./OverlayTrigger');
 var PlaylistActions = require('../actions/PlaylistActions');
-var SearchActions = require('../actions/SearchActions');
 
 var request = require('superagent');
 
@@ -41,6 +40,7 @@ var TopBar = React.createClass({
         autoCompleteTimeout = null;
       }
 
+      console.log(q);
       var q = this.refs.query.getDOMNode().value.trim();
       location.hash = q;
 
@@ -61,6 +61,7 @@ var TopBar = React.createClass({
     var q = this.refs.query.getDOMNode().value,
         that = this;
 
+    console.log(q);
     this.props.changeQuery(q);
 
     if(autoCompleteTimeout){
@@ -170,7 +171,6 @@ var TopBar = React.createClass({
     var clientStr = this.props.partyClients && this.props.partyClients > 1 ? 'clients' : 'client'
 
     var showJoinBar;
-    console.log(this.props.sync, window.DATA.playlists[0])
     if(window.DATA.playlists[0] && !this.props.sync && !this.state.hideMessage){
       showJoinBar = true;
       setTimeout(function(){
@@ -192,7 +192,7 @@ var TopBar = React.createClass({
             <span className="label" style={labelStyle}>{this.props.partyClients} {clientStr}</span>
           </span>
           <input type="text" className="q" ref="query" onChange={this.handleInputChange} onKeyDown={this.handleInputKeyDown}
-          placeholder="Search for music videos here..." value={this.props.currentQuery} />
+          placeholder="Search for videos / paste address of a page with Youtube videos..." value={this.props.currentQuery} />
           <input type="submit" value="Search" />
           <input type="checkbox" className="desktop" value="HD Only" id="hd-checkbox" onChange={this.handleHdOnlyChange} />
           <label htmlFor="hd-checkbox" className="desktop"> HD Only </label>
