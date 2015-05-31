@@ -67,8 +67,11 @@ Playlist.getPlaylistDetails = function(id, callback){
     // }, '').slice(0, -2);
     // desc += '!';
 
-    result.description = desc;
-    result.videos = plInfo.videos;
+    result = {
+      description: desc,
+      videos: plInfo.videos,
+      plId: id
+    };
 
     callback(null, result);
   })
