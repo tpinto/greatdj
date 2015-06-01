@@ -30,6 +30,11 @@ ga('send', 'pageview');
 
 window.DATA = JSON.parse(atob(window.RAW));
 
+// soundcloud api
+SC.initialize({
+  client_id: '6bc7e6199675a8daa2b68926fcd32576'
+});
+
 // application wide initizalizations
 window.app = {
 	baseTitle: 'GREAT DJ!'

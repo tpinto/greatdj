@@ -13,23 +13,19 @@ var API_KEY = 'AIzaSyDLwX06yG_73ImDEubOb5Yv0E_U1iIdTJs';
 
 var SearchComponent = React.createClass({
 
-  videoEnqueued: function(id, title, type){
+  videoEnqueued: function(video){
     var evt = new CustomEvent('enqueue',
       {'detail': {
-        'type': type,
-        'title': title,
-        'videoId': id,
+        'video': video,
       }
     });
     window.dispatchEvent(evt);
   },
 
-  playNowHandler: function(id, title, type){
+  playNowHandler: function(video){
     var evt = new CustomEvent('playNow',
       {'detail': {
-        'type': type,
-        'title': title,
-        'videoId': id,
+        'video': video,
       }
     });
     window.dispatchEvent(evt);

@@ -7,12 +7,12 @@ var React = require('react'),
 
 var SearchResults = React.createClass({
   handleVideoEnqueue: function(video){
-    this.props.enqueueHandler(video.id.videoId || video.id, video.snippet.title, 'youtube');
+    this.props.enqueueHandler(video);
     return false;
   },
 
   handlePlayNow: function(video){
-    this.props.playNowHandler(video.id.videoId || video.id, video.snippet.title, 'youtube');
+    this.props.playNowHandler(video);
     return false;
   },
 
@@ -20,7 +20,7 @@ var SearchResults = React.createClass({
     var resultsList = this.props.videos.map(function(res, i){
       var rowClassName = 'row ' + (i % 2 ? 'odd' : 'even');
 
-      var pos = this.props.getPlaylistPosition(res.id.videoId);
+      var pos = this.props.getPlaylistPosition(res.id);
 
       if(pos > 0){
         rowClassName += ' in-queue';
@@ -31,16 +31,17 @@ var SearchResults = React.createClass({
       }
 
       return (
-        <tr key={res.id.videoId} className={rowClassName}>
+        <tr key={res.id} className={rowClassName}>
           <td className="imgTd">
             <a onClick={this.handleVideoEnqueue.bind(this, res)} href="#">
-              <img className="thumbnail" src={ res.snippet.thumbnails.medium.url } />
+              <img className="thumbnail" src={ res.snippet.thumbnail } />
             </a>
           </td>
           <td className="descTd">
             <a onClick={this.handleVideoEnqueue.bind(this, res)} href="#">
               { res.snippet.title }
             </a>
+            <i className={"source fa fa-"+res.source}></i>
             <p className="entry-state in-queue">
               <i className="fa" />
               In Queue

@@ -79,7 +79,7 @@ Playlist.getPlaylistDetails = function(id, callback){
 
 function getPlaylistArtists(playlist){
   var artists = [];
-  var titles = playlist.map(function(pl){ return pl.title });
+  var titles = playlist.map(function(pl){ return pl.title || pl.snippet.title });
 
   titles.forEach(function(title){
     if(title.indexOf('-') === -1){ return; }

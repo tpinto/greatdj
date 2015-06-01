@@ -73,6 +73,7 @@ var Api = {
   searchForVideos: function(q, videoDef){
     var key = Constants.SEARCH_SUCCESS;
 
+    // Youtube
     request
       .get('https://www.googleapis.com/youtube/v3/search')
       .query({
@@ -84,8 +85,40 @@ var Api = {
         videoDefinition: videoDef
       })
       .end(function(err, response){
-        dispatch(key, {items: response.body.items});
+       var items = response.body.items.map(function(video){
+        console.log(video)
+         return {
+          id: video.id.videoId,
+          source: 'youtube',
+          snippet: {
+            title: video.snippet.title,
+            thumbnail: video.snippet.thumbnails.medium.url
+          },
+          url: 'http://www.youtube.com/watch?v=' + video.id.videoId
+        }
       });
+
+       dispatch(key, {items: items});
+
+      });
+
+    // Soundcloud
+    SC.get('/tracks', {q: q, limit: 20}, function(tracks) {
+      var items = tracks.map(function(track){
+         return {
+          id: track.id,
+          source: 'soundcloud',
+          snippet: {
+            title: track.title,
+            thumbnail: track.artwork_url
+          },
+          url: track.uri
+        }
+      })
+
+      dispatch(key, {items: items});
+
+    });
 
     request
       .post('/s')
