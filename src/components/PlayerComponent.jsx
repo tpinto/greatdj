@@ -22,7 +22,7 @@ var PlayerComponent = React.createClass({
 
     window.addEventListener('enqueue', function(e){
       var playlist = that.props.playlist;
-      playlist.push(e.detail);
+      playlist.push(e.detail.video);
 
       var pos = that.props.position;
       if(pos < playlist.length && !that.state.playing){
@@ -37,7 +37,7 @@ var PlayerComponent = React.createClass({
       var playlist = that.props.playlist,
           currPos = that.props.position;
 
-      playlist.splice(currPos + 1, 0, e.detail);
+      playlist.splice(currPos + 1, 0, e.detail.video);
 
       that.props.setPlaylistChange({
         playlist: playlist,
@@ -67,7 +67,7 @@ var PlayerComponent = React.createClass({
     var pos = this.props.position,
         pl = this.props.playlist;
 
-    document.title =  pl[pos].title + ' \u266B ' + window.app.baseTitle;
+    document.title =  pl[pos].snippet.title + ' \u266B ' + window.app.baseTitle;
   },
 
   handleVideoEnded: function(){
@@ -77,9 +77,9 @@ var PlayerComponent = React.createClass({
     if(pos > -1){
       // next video go!
       if(pos != this.props.position){
-        this.setState({videoId: pl[pos].videoId, type: 'youtube'});
+        this.setState({video: pl[pos].id});
         this.props.setPlaylistChange({position: pos});
-        this.played.push(pl[pos].videoId);
+        this.played.push(pl[pos].id);
       } else {
         // shitty edge case of restarting a video
         window.dispatchEvent(new CustomEvent('restartVideo'));
@@ -112,8 +112,8 @@ var PlayerComponent = React.createClass({
     // remove the element from the playlist
     pl.splice(pos, 1);
 
-    if(this.played.indexOf(video.videoId) > -1){
-      var playedIndex = this.played.indexOf(video.videoId);
+    if(this.played.indexOf(video.id) > -1){
+      var playedIndex = this.played.indexOf(video.id);
       this.played.splice(playedIndex, 1);
     }
 
@@ -139,8 +139,6 @@ var PlayerComponent = React.createClass({
   // ----
 
   getNextSong: function(){
-    console.log('get next song', this.props.shuffleActive, this.played, this.props.playlist);
-
     if(this.props.shuffleActive){
       if(this.played.length === this.props.playlist.length){
         // already played all videos on current playlist
@@ -156,7 +154,7 @@ var PlayerComponent = React.createClass({
       var pos, videoId;
       do {
         pos = Math.floor(Math.random() * this.props.playlist.length);
-        videoId = this.props.playlist[pos].videoId;
+        videoId = this.props.playlist[pos].id;
       } while(this.played.indexOf(videoId) > -1);
 
       console.log('gonna return', pos, this.played);
@@ -184,7 +182,7 @@ var PlayerComponent = React.createClass({
       if (pl.length==1) { // One video in playlist
         window.dispatchEvent(new CustomEvent('restartVideo'));
       } else {
-        this.setState({videoId: pl[0].videoId, type: 'youtube'});
+        this.setState({videoId: pl[0]});
         this.props.setPlaylistChange({position: 0});
       }
     }
@@ -198,8 +196,12 @@ var PlayerComponent = React.createClass({
   },
 
   playVideoByPos: function(pos){
-    if(pos >= 0)
-      this.setState({videoId: this.props.playlist[pos].videoId, type: 'youtube', playing: true});
+    if(pos >= 0){
+      this.setState({
+        video: this.props.playlist[pos],
+        playing: true
+      });
+    }
   },
 
   // ------
@@ -247,11 +249,10 @@ var PlayerComponent = React.createClass({
       <div>
         <Player
           autoplay="true"
-          videoId={this.state.videoId}
+          video={this.state.video}
           position={this.props.position}
           ts={this.props.ts}
           dts={this.props.dts}
-          type={this.state.type}
           playing={this.handleVideoPlaying}
           stopped={this.noop}
           ended={this.handleVideoEnded}

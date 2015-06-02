@@ -14,6 +14,10 @@ var SearchActions = {
       }
     });
 
+    AppDispatcher.handleViewAction({
+      actionType: Constants.EMPTY_RESULTS_PARTIAL,
+    });
+
     var decodedQ = decodeURIComponent(q);
     console.log('searchactions', q)
 

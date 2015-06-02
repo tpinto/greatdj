@@ -10,8 +10,17 @@ var _q;
 var _recent = window.DATA.recent;
 
 function searchReturned(terms){
-  _videos = terms;
+  _videos = _videos.concat(terms).sort(function(a, b){
+    if(a.source === 'youtube' && b.source !== 'youtube')
+      return -1;
+    return 0;
+  });
 }
+
+function resetSearch(){
+  _videos = [];
+}
+
 
 function setQuery(q){
   _q = q;
@@ -62,8 +71,11 @@ AppDispatcher.register(function(payload) {
       searchReturned(action.response.items);
       SearchStore.emitChange();
     break;
+    case Constants.EMPTY_RESULTS_PARTIAL:
+      resetSearch();
+    break;
     case Constants.RESET_RESULTS:
-      searchReturned([]);
+      resetSearch();
       setQuery('');
       SearchStore.emitChange();
     break;
