@@ -53,7 +53,7 @@ var IntroComponent = React.createClass({
         <div className="intro">
           <h1>Create, save and share music playlists, the easy way!</h1>
           <p className="subtitle">Now with both
-            <span className="black">Youtube <i className="fa fa-youtube"></i></span> and
+            <span className="black">YouTube <i className="fa fa-youtube"></i></span> and
             <span className="black">Soundcloud <i className="fa fa-soundcloud"></i></span>
             support!
           </p>
