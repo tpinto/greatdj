@@ -200,16 +200,16 @@ var StateHandler = React.createClass({
     SearchActions.search(this.state.currentQuery, hdOnly ? 'high' : 'any');
   },
 
-  getPlaylistPosition: function(videoId){
+  getPlaylistPosition: function(id){
     if(this.state.playlist.length){
       if(this.state.playlist[this.state.position] &&
-        this.state.playlist[this.state.position].videoId == videoId){
+        this.state.playlist[this.state.position].id == id){
         // i'm currently playing - always show currently playing
         return 0;
       }
     }
     for (var i = this.state.playlist.length - 1; i >= 0; i--) {
-      if(this.state.playlist[i].videoId === videoId){
+      if(this.state.playlist[i].id === id){
         if(i < this.state.position) {
           return -1;
         } else {
