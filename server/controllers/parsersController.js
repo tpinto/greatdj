@@ -49,6 +49,7 @@ var Parsers = function(){
             key: youtubeApiKey
           }).end(function(e, response){
             result.items = response.body.items || [];
+            console.log(response.body);
             callback(e, result);
           });
       });
